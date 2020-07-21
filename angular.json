@@ -1,0 +1,220 @@
+{
+  "version": 1,
+  "projects": {
+    "site15-client": {
+      "projectType": "application",
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "apps/site15-client",
+      "sourceRoot": "apps/site15-client/src",
+      "prefix": "site15-client",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/apps/site15-client",
+            "index": "apps/site15-client/src/index.html",
+            "main": "apps/site15-client/src/main.ts",
+            "polyfills": "apps/site15-client/src/polyfills.ts",
+            "tsConfig": "apps/site15-client/tsconfig.app.json",
+            "aot": true,
+            "assets": ["apps/site15-client/src/favicon.ico", "apps/site15-client/src/assets"],
+            "styles": ["apps/site15-client/src/styles.scss"],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/site15-client/src/environments/environment.ts",
+                  "with": "apps/site15-client/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "site15-client:build",
+            "proxyConfig": "apps/site15-client/proxy.conf.json"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "site15-client:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "site15-client:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/site15-client/tsconfig.app.json",
+              "apps/site15-client/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!apps/site15-client/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/site15-client/jest.config.js",
+            "tsConfig": "apps/site15-client/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "apps/site15-client/src/test-setup.ts"
+          }
+        }
+      }
+    },
+    "site15-client-e2e": {
+      "root": "apps/site15-client-e2e",
+      "sourceRoot": "apps/site15-client-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/site15-client-e2e/cypress.json",
+            "tsConfig": "apps/site15-client-e2e/tsconfig.e2e.json",
+            "devServerTarget": "site15-client:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "site15-client:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": ["apps/site15-client-e2e/tsconfig.e2e.json"],
+            "exclude": ["**/node_modules/**", "!apps/site15-client-e2e/**/*"]
+          }
+        }
+      }
+    },
+    "site15-server": {
+      "root": "apps/site15-server",
+      "sourceRoot": "apps/site15-server/src",
+      "projectType": "application",
+      "prefix": "api",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@nrwl/node:build",
+          "options": {
+            "outputPath": "dist/apps/site15-server",
+            "main": "apps/site15-server/src/main.ts",
+            "tsConfig": "apps/site15-server/tsconfig.app.json",
+            "assets": ["apps/site15-server/src/assets"]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/site15-server/src/environments/environment.ts",
+                  "with": "apps/site15-server/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "site15-server:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/site15-server/tsconfig.app.json",
+              "apps/site15-server/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!apps/site15-server/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/site15-server/jest.config.js",
+            "tsConfig": "apps/site15-server/tsconfig.spec.json",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "common": {
+      "root": "libs/common",
+      "sourceRoot": "libs/common/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/common/tsconfig.lib.json",
+              "libs/common/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/common/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/common/jest.config.js",
+            "tsConfig": "libs/common/tsconfig.spec.json",
+            "passWithNoTests": true
+          }
+        }
+      }
+    }
+  },
+  "cli": {
+    "defaultCollection": "@nrwl/angular"
+  },
+  "schematics": {
+    "@nrwl/angular:application": {
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "cypress"
+    },
+    "@nrwl/angular:library": {
+      "unitTestRunner": "jest"
+    }
+  },
+  "defaultProject": "site15-client"
+}

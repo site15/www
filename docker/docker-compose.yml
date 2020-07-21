@@ -1,0 +1,34 @@
+version: '3'
+networks:
+  site15-network:
+    ipam:
+      config:
+        - subnet: '172.12.0.0/16'
+
+services:
+  site15-client:
+    image: 'site15/client'
+    container_name: 'site15-client'
+    volumes:
+      - ./nginx/logs:/var/log/nginx/
+    build:
+      context: ../
+      dockerfile: ./docker/Dockerfile.site15-client
+    networks:
+      - site15-network
+    ports:
+      - '9090:9090'
+    tty: true
+    depends_on:
+      - site15-server
+
+  site15-server:
+    image: 'site15/server'
+    container_name: 'site15-server'
+    build:
+      context: ../
+      dockerfile: ./docker/Dockerfile.site15-server
+    user: $UID:$GID
+    networks:
+      - site15-network
+    tty: true

@@ -1,0 +1,10 @@
+FROM node:12
+LABEL maintainer="admin@site15.ru"
+WORKDIR /usr/src/app
+COPY ./apps/site15-server/package.json ./
+RUN npm config set package-lock false
+RUN npm i --only=production
+COPY ./dist/apps/site15-server .
+EXPOSE 5000
+STOPSIGNAL SIGINT
+CMD ["node", "main.js"]

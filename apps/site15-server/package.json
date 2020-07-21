@@ -1,0 +1,14 @@
+{
+  "name": "@site15/server",
+  "version": "0.0.0",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "rxjs": "6.6.0",
+    "zone.js": "0.10.3",
+    "@nestjs/common": "7.3.2",
+    "@nestjs/core": "7.3.2",
+    "@nestjs/platform-express": "7.3.2",
+    "reflect-metadata": "0.1.13"
+  }
+}

@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: site15
+  name: site15-client
+  labels:
+    app: site15-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      pod: site15-client-container
+  template:
+    metadata:
+      namespace: site15
+      labels:
+        pod: site15-client-container
+    spec:
+      containers:
+        - name: site15-client
+          image: site15/client:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80

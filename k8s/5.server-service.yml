@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  namespace: site15
+  name: site15-server-service
+spec:
+  selector:
+    pod: site15-server-container
+  ports:
+    - protocol: TCP
+      port: 5000
+  type: ClusterIP

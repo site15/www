@@ -1,0 +1,35 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  namespace: site15
+  name: site15-ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "1800"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "1800"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/secure-backends: "true"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/websocket-services: site15-server-service
+    nginx.org/websocket-services: site15-server-service
+spec:
+  tls:
+  - hosts:
+      - site15.ru
+    secretName: echo-tls
+  backend:
+    serviceName: site15-client-service
+    servicePort: 80
+  rules:
+  - host: site15.ru
+    http:
+      paths:
+      - path: /api
+        backend:
+          serviceName: site15-server-service
+          servicePort: 5000
+      - path: /
+        backend:
+          serviceName: site15-client-service
+          servicePort: 80
