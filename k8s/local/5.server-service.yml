@@ -1,7 +1,7 @@
 kind: Service
 apiVersion: v1
 metadata:
-  namespace: site15
+  namespace: site15-local
   name: site15-server-service
 spec:
   selector:
@@ -9,4 +9,5 @@ spec:
   ports:
     - protocol: TCP
       port: 5000
+      targetPort: 5000
   type: ClusterIP

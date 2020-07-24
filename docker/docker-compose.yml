@@ -6,14 +6,14 @@ networks:
         - subnet: '172.12.0.0/16'
 
 services:
-  site15-client:
-    image: 'site15/client'
-    container_name: 'site15-client'
+  site15-server-with-static:
+    image: 'site15/server-with-static'
+    container_name: 'site15-server-with-static-service'
     volumes:
       - ./nginx/logs:/var/log/nginx/
     build:
       context: ../
-      dockerfile: ./docker/Dockerfile.site15-client
+      dockerfile: ./docker/Dockerfile.site15-server-with-static
     networks:
       - site15-network
     ports:
@@ -24,7 +24,7 @@ services:
 
   site15-server:
     image: 'site15/server'
-    container_name: 'site15-server'
+    container_name: 'site15-server-service'
     build:
       context: ../
       dockerfile: ./docker/Dockerfile.site15-server

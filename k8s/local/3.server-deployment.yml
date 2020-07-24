@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: site15
+  namespace: site15-local
   name: site15-server
   labels:
     app: site15-server
@@ -12,13 +12,13 @@ spec:
       pod: site15-server-container
   template:
     metadata:
-      namespace: site15
+      namespace: site15-local
       labels:
         pod: site15-server-container
     spec:
       containers:
         - name: site15-server
           image: site15/server:latest
-          imagePullPolicy: Always
+          imagePullPolicy: Never
           ports:
             - containerPort: 5000

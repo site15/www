@@ -96,3 +96,28 @@ Nx Cloud pairs with Nx in order to enable you to build and test code more rapidl
 Teams using Nx gain the advantage of building full-stack applications with their preferred framework alongside Nx’s advanced code generation and project dependency graph, plus a unified experience for both frontend and backend developers.
 
 Visit [Nx Cloud](https://nx.app/) to learn more.
+
+# Run with docker-compose
+```bash
+npm run docker:up
+```
+
+# Run with microk8s
+
+```bash
+sudo snap install microk8s --classic
+microk8s enable dashboard dns registry ingress metrics-server storage
+microk8s kubectl create namespace cert-manager
+microk8s kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.26.1/deploy/static/mandatory.yaml
+microk8s kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.26.1/deploy/static/provider/cloud-generic.yaml
+microk8s kubectl get pods --all-namespaces -l app.kubernetes.io/name=ingress-nginx
+microk8s kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v0.12.0/cert-manager.yaml
+microk8s kubectl get pods --namespace cert-manager
+microk8s kubectl create -f ./k8s/staging-issuer.yaml
+microk8s kubectl create -f ./k8s/prod-issuer.yaml
+npm run k8s:local:apply
+microk8s kubectl apply -f ./k8s/local-ingress.yml
+microk8s kubectl get all --all-namespaces
+microk8s kubectl describe certificate echo-tls
+kubectl delete namespace site15-local
+```

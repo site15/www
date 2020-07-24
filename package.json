@@ -26,9 +26,13 @@
     "workspace-schematic": "nx workspace-schematic",
     "dep-graph": "nx dep-graph",
     "help": "nx help",
-    "docker:up":"./docker/docker-compose-up.sh",
-    "docker:down":"./docker/docker-compose-down.sh",
-    "docker:restart":"npm run docker:down && npm run docker:up"
+    "docker:up": "./docker/docker-compose-up.sh",
+    "docker:down": "./docker/docker-compose-down.sh",
+    "docker:restart": "npm run docker:down && npm run docker:up",
+    "docker:build": "./docker/docker-compose-build.sh",
+    "k8s:local:apply": "./k8s/local/apply.sh",
+    "k8s:local:build-apply": "npm run docker:build && npm run k8s:local:apply",
+    "k8s:local:dashboard": "microk8s dashboard-proxy"
   },
   "private": true,
   "dependencies": {
