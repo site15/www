@@ -100,6 +100,22 @@ Visit [Nx Cloud](https://nx.app/) to learn more.
 # Run with docker-compose
 ```bash
 npm run docker:up
+# open http://localhost:9090/
+```
+
+# Run with microk8s in local
+
+```bash
+sudo snap install microk8s --classic
+microk8s enable dashboard dns registry ingress metrics-server storage
+microk8s kubectl create namespace cert-manager
+microk8s kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.26.1/deploy/static/mandatory.yaml
+microk8s kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.26.1/deploy/static/provider/cloud-generic.yaml
+microk8s kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v0.12.0/cert-manager.yaml
+microk8s kubectl create -f ./k8s/staging-issuer.yaml
+microk8s kubectl create -f ./k8s/prod-issuer.yaml
+npm run k8s:local:build-apply
+# open http://localhost/site15
 ```
 
 # Run with microk8s
@@ -116,8 +132,7 @@ microk8s kubectl get pods --namespace cert-manager
 microk8s kubectl create -f ./k8s/staging-issuer.yaml
 microk8s kubectl create -f ./k8s/prod-issuer.yaml
 npm run k8s:local:apply
-microk8s kubectl apply -f ./k8s/local-ingress.yml
 microk8s kubectl get all --all-namespaces
 microk8s kubectl describe certificate echo-tls
-kubectl delete namespace site15-local
+microk8s kubectl delete namespace site15-local
 ```

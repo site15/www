@@ -26,6 +26,34 @@
             "scripts": []
           },
           "configurations": {
+            "local": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/site15-client/src/environments/environment.ts",
+                  "with": "apps/site15-client/src/environments/environment.local.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            },
             "production": {
               "fileReplacements": [
                 {
@@ -63,6 +91,9 @@
             "proxyConfig": "apps/site15-client/proxy.conf.json"
           },
           "configurations": {
+            "local": {
+              "browserTarget": "site15-client:build:local"
+            },
             "production": {
               "browserTarget": "site15-client:build:production"
             }
@@ -108,6 +139,9 @@
             "devServerTarget": "site15-client:serve"
           },
           "configurations": {
+            "local": {
+              "devServerTarget": "site15-client:serve:local"
+            },
             "production": {
               "devServerTarget": "site15-client:serve:production"
             }
@@ -138,6 +172,17 @@
             "assets": ["apps/site15-server/src/assets"]
           },
           "configurations": {
+            "local": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/site15-server/src/environments/environment.ts",
+                  "with": "apps/site15-server/src/environments/environment.local.ts"
+                }
+              ]
+            },
             "production": {
               "optimization": true,
               "extractLicenses": true,

@@ -18,7 +18,6 @@ spec:
     spec:
       containers:
         - name: site15-static
-          image: site15/static:latest
-          imagePullPolicy: Never
+          image: site15/static:local
           ports:
             - containerPort: 9090
