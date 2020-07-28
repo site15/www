@@ -4,12 +4,12 @@ services:
   site15-server:
     image: 'site15/server:local'
     build:
-      context: ../
+      context: ../..
       dockerfile: ./docker/Dockerfile.site15-server
     user: $UID:$GID
 
   site15-nginx-static:
     image: 'site15/static:local'
     build:
-      context: ../
+      context: ../..
       dockerfile: ./docker/Dockerfile.site15-static
