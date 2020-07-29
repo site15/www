@@ -5,4 +5,4 @@ docker save site15/server:local > ./tmp/site15-server-local.tar
 docker save site15/static:local > ./tmp/site15-static-local.tar
 microk8s ctr image import ./tmp/site15-server-local.tar
 microk8s ctr image import ./tmp/site15-static-local.tar
-microk8s kubectl apply -f  ./k8s/local
+./k8s/local/apply.sh
