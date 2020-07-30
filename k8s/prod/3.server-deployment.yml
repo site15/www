@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: site15-server
-          image: site15/site15-server:latest
+          image: site15/site15-ru-server:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 5000

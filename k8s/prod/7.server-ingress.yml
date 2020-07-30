@@ -22,7 +22,7 @@ spec:
     - host: site15.ru
       http:
         paths:
-          - path: /(/|$)(.*)
+          - path: /api(/|$)(.*)
             backend:
               serviceName: site15-server-service
               servicePort: 5000
