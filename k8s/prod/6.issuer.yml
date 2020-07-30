@@ -1,17 +1,17 @@
 apiVersion: cert-manager.io/v1alpha2
 kind: ClusterIssuer
 metadata:
-  namespace: site15-prod
-  name: letsencrypt-prod
+  namespace: site15-local
+  name: letsencrypt-local
 spec:
   acme:
     # The ACME server URL
     server: https://acme-v02.api.letsencrypt.org/directory
     # Email address used for ACME registration
-    email: admin@site15.ru
+    email: your_email_address_here
     # Name of a secret used to store the ACME account private key
     privateKeySecretRef:
-      name: letsencrypt-prod
+      name: letsencrypt-local
     # Enable the HTTP-01 challenge provider
     solvers:
     - http01:

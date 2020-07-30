@@ -1,0 +1,72 @@
+name: "Deploy Production"
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          # We must fetch at least the immediate parents so that if this is
+          # a pull request then we can checkout the head.
+          fetch-depth: 2
+
+      # If this run was triggered by a pull request event, then checkout
+      # the head of the pull request instead of the merge commit.
+      - run: git checkout HEAD^2
+        if: ${{ github.event_name == 'pull_request' }}
+
+      - name: Install packages
+        run: npm install
+
+      - name: Run build server
+        run: npm run build:prod
+
+      - name: Build and push Docker images (static)
+        uses: docker/build-push-action@v1
+        with:
+          dockerfile: docker/Dockerfile.site15-static
+          username: endykaufman
+          password: ${{ secrets.DOCKER_HUB_TOKEN }}
+          registry: docker.io
+          repository: site15.ru/static
+          tags: latest
+
+      - name: Build and push Docker images (server)
+        uses: docker/build-push-action@v1
+        with:
+          dockerfile: docker/Dockerfile.site15-server
+          username: endykaufman
+          password: ${{ secrets.DOCKER_HUB_TOKEN }}
+          registry: docker.io
+          repository: site15.ru/server
+          tags: latest
+
+      - name: Copy K8S files to host
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          source: "k8s/prod"
+          target: "vps/site15.ru"
+          rm: true
+
+      - name: Apply to K8S
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          script: |
+            /snap/bin/microk8s kubectl delete deployment site15-static -n site15-prod --now
+            /snap/bin/microk8s kubectl delete deployment site15-server -n site15-prod --now
+            /snap/bin/microk8s kubectl apply -f ./vps/site15.ru/k8s/prod
