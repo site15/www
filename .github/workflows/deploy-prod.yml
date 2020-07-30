@@ -37,7 +37,7 @@ jobs:
           username: endykaufman
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
           registry: docker.io
-          repository: site15.ru/static
+          repository: site15/site15-ru-static
           tags: latest
 
       - name: Build and push Docker images (server)
@@ -47,7 +47,7 @@ jobs:
           username: endykaufman
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
           registry: docker.io
-          repository: site15.ru/server
+          repository: site15/site15-ru-server
           tags: latest
 
       - name: Copy K8S files to host

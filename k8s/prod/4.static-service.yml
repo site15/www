@@ -1,7 +1,7 @@
 kind: Service
 apiVersion: v1
 metadata:
-  namespace: site15-local
+  namespace: site15-prod
   name: site15-static-service
 spec:
   selector:
