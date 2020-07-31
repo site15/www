@@ -6,7 +6,7 @@ metadata:
   labels:
     app: site15-server
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       pod: site15-server-container
@@ -22,3 +22,10 @@ spec:
           imagePullPolicy: Never
           ports:
             - containerPort: 5000
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
