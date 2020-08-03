@@ -1,4 +1,4 @@
 FROM nginx:alpine
 LABEL maintainer="admin@site15.ru"
-COPY ./docker/nginx/nginx-server-with-static.conf /etc/nginx/conf.d/nginx-server-with-static.conf
+COPY ./docker/prod/nginx/nginx-server-with-static.conf /etc/nginx/conf.d/nginx-server-with-static.conf
 COPY ./dist/apps/site15-client /usr/share/nginx/html

@@ -39,4 +39,5 @@ testem.log
 Thumbs.db
 
 # Logs
-/docker/nginx/logs
+/docker/dev/logs
+/docker/prod/logs

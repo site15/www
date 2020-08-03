@@ -1,0 +1,55 @@
+version: "3"
+networks:
+  site15-network:
+    ipam:
+      config:
+        - subnet: "172.12.0.0/16"
+
+volumes:
+  site15-postgresql:
+    external: true
+  site15-redis:
+    external: true
+
+services:
+  site15-nginx:
+    image: nginx:latest
+    ports:
+      - "9090:9090"
+    container_name: "site15-nginx"
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+      - ./logs:/var/log/nginx/
+    networks:
+      - site15-network
+    depends_on:
+      - site15-client
+      - site15-server
+
+  site15-client:
+    image: "node:12"
+    user: $UID:$GID
+    container_name: "site15-client-service"
+    working_dir: "/app"
+    volumes:
+      - ./../../:/app
+    networks:
+      - site15-network
+    ports:
+      - "4200:4200"
+    command: "npm run start:dev:client"
+    tty: true
+
+  site15-server:
+    image: "node:12"
+    user: $UID:$GID
+    container_name: "site15-server-service"
+    working_dir: "/app"
+    volumes:
+      - ./../../:/app
+    networks:
+      - site15-network
+    ports:
+      - "5000:5000"
+    command: "npm run start:dev:server"
+    tty: true
