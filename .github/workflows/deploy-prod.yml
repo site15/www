@@ -33,7 +33,7 @@ jobs:
       - name: Build and push Docker images (static)
         uses: docker/build-push-action@v1
         with:
-          dockerfile: docker/Dockerfile.site15-static
+          dockerfile: docker/prod/Dockerfile.site15-static
           username: endykaufman
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
           registry: docker.io
@@ -43,7 +43,7 @@ jobs:
       - name: Build and push Docker images (server)
         uses: docker/build-push-action@v1
         with:
-          dockerfile: docker/Dockerfile.site15-server
+          dockerfile: docker/prod/Dockerfile.site15-server
           username: endykaufman
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
           registry: docker.io
