@@ -1,34 +1,72 @@
-version: '3'
+version: "3"
 networks:
   site15-network:
     ipam:
       config:
-        - subnet: '172.12.0.0/16'
+        - subnet: "172.12.0.0/16"
+
+volumes:
+  site15-postgresql:
+    external: true
+  site15-redis:
+    external: true
 
 services:
   site15-server-with-static:
-    image: 'site15/server-with-static'
-    container_name: 'site15-server-with-static-service'
+    image: "site15/server-with-static"
+    container_name: "site15-server-with-static-service"
     volumes:
-      - ./prod/logs:/var/log/nginx/
+      - ./logs:/var/log/nginx/
     build:
       context: ../../
       dockerfile: ./docker/prod/Dockerfile.site15-server-with-static
     networks:
       - site15-network
     ports:
-      - '9090:9090'
+      - "9090:9090"
     tty: true
     depends_on:
       - site15-server
+    restart: always
 
   site15-server:
-    image: 'site15/server'
+    image: "site15/server"
     user: $UID:$GID
-    container_name: 'site15-server-service'
+    container_name: "site15-server-service"
+    environment:
+      - POSTGRES_URL=postgres://postgres:postgres@site15-postgres:5432/site15?schema=public    
     build:
       context: ../../
       dockerfile: ./docker/prod/Dockerfile.site15-server
     networks:
       - site15-network
     tty: true
+    restart: always
+    depends_on:
+      - site15-postgres
+      - site15-redis
+
+  site15-postgres:
+    image: "postgres:12"
+    container_name: "site15-postgres"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=site15
+    ports:
+      - "15432:5432"
+    volumes:
+      - site15-postgresql:/var/lib/postgresql/site15_data
+    networks:
+      - site15-network
+    restart: always
+
+  site15-redis:
+    image: redis:6-alpine
+    container_name: "site15-redis"
+    command: ["redis-server"]
+    volumes:
+      - site15-redis:/data
+    networks:
+      - site15-network
+    restart: always

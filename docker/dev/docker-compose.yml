@@ -66,8 +66,8 @@ services:
       - site15-redis
 
   site15-postgres:
-    container_name: "site15-postgres"
     image: "postgres:12"
+    container_name: "site15-postgres"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
@@ -93,4 +93,3 @@ services:
       - site15-redis:/data
     networks:
       - site15-network
-    restart: always

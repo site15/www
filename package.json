@@ -30,7 +30,7 @@
     "docker:dev:up": "./docker/dev/docker-compose-up.sh",
     "docker:dev:down": "./docker/dev/docker-compose-down.sh",
     "docker:dev:restart": "npm run docker:dev:down && npm run docker:dev:up",
-    "docker:prod:up": "npm run build && ./docker/prod/docker-compose-up.sh",
+    "docker:prod:up": "npm run build && ./docker/prod/docker-compose-up.sh && npm run migrate:local",
     "docker:prod:down": "./docker/prod/docker-compose-down.sh",
     "docker:prod:restart": "npm run docker:prod:down && npm run docker:prod:up",
     "docker:prod:build": "npm run build && ./docker/prod/docker-compose-build.sh",
