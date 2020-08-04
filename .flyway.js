@@ -1,22 +1,18 @@
 const { ConnectionString } = require('connection-string');
 const connectionString = new ConnectionString(process.env.POSTGRES_URL);
-const USERNAME = connectionString.user;
-const PASSWORD = connectionString.password;
-const PORT = connectionString.hosts && +connectionString.hosts[0].port;
-const HOST = connectionString.hosts && connectionString.hosts[0].name;
-const DATABASE = connectionString.path && connectionString.path[0];
-const SCHEMA =
-  connectionString.params &&
-  connectionString.params &&
-  connectionString.params.schema;
-const SCHEMAS =
-  connectionString.params &&
-  connectionString.params &&
-  connectionString.params.schemas;
 
+const {
+  user: USERNAME,
+  password: PASSWORD,
+  HOST = cs.hosts && cs.hosts[0].toString(),
+  DATABASE = cs.path && cs.path[0],
+  SCHEMA = cs.params && cs.params.schema,
+  SCHEMAS = cs.params && cs.params.schemas
+} = cs;
+      
 module.exports = {
   flywayArgs: {
-    url: `jdbc:postgresql://${HOST}:${PORT}/${DATABASE}`,
+    url: `jdbc:postgresql://${HOST}/${DATABASE}`,
     schemas: SCHEMAS || SCHEMA,
     defaultSchema: SCHEMA,
     locations: `filesystem:migrations`,
