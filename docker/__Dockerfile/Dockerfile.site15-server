@@ -9,4 +9,4 @@ RUN npm run prisma:generate
 COPY ./dist/apps/site15-server .
 EXPOSE 5000
 STOPSIGNAL SIGINT
-CMD ["npm", "start"]
+CMD ["node", "main.js"]

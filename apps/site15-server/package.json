@@ -4,7 +4,6 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "start": "node ./main.js",
     "prisma:generate": "prisma generate"
   },
   "dependencies": {
