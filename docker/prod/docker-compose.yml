@@ -19,7 +19,7 @@ services:
       - ./logs:/var/log/nginx/
     build:
       context: ../../
-      dockerfile: ./docker/prod/Dockerfile.site15-server-with-static
+      dockerfile: ./docker/__Dockerfile/Dockerfile.site15-server-with-static
     networks:
       - site15-network
     ports:
@@ -37,7 +37,7 @@ services:
       - POSTGRES_URL=postgres://postgres:postgres@site15-postgres:5432/site15?schema=public    
     build:
       context: ../../
-      dockerfile: ./docker/prod/Dockerfile.site15-server
+      dockerfile: ./docker/__Dockerfile/Dockerfile.site15-server
     networks:
       - site15-network
     tty: true

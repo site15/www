@@ -34,7 +34,7 @@ jobs:
         uses: docker/build-push-action@v1
         if: ${{ github.event_name == 'push' }}
         with:
-          dockerfile: docker/prod/Dockerfile.site15-static
+          dockerfile: docker/__Dockerfile/Dockerfile.site15-static
           username: endykaufman
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
           registry: docker.io
@@ -45,7 +45,7 @@ jobs:
         uses: docker/build-push-action@v1
         if: ${{ github.event_name == 'push' }}
         with:
-          dockerfile: docker/prod/Dockerfile.site15-server
+          dockerfile: docker/__Dockerfile/Dockerfile.site15-server
           username: endykaufman
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
           registry: docker.io
@@ -71,6 +71,5 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
           script: |
-            /snap/bin/microk8s kubectl delete deployment site15-static -n site15-prod --now
-            /snap/bin/microk8s kubectl delete deployment site15-server -n site15-prod --now
-            /snap/bin/microk8s kubectl apply -f ./vps/site15.ru/k8s/prod
+            cd ./vps/site15.ru
+            ./k8s/prod/apply.sh
