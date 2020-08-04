@@ -97,9 +97,15 @@ Teams using Nx gain the advantage of building full-stack applications with their
 
 Visit [Nx Cloud](https://nx.app/) to learn more.
 
+# Run with docker-compose in development mode
+```bash
+npm run docker:dev:up
+# open http://localhost:9090/
+```
+
 # Run with docker-compose
 ```bash
-npm run docker:up
+npm run docker:prod:up
 # open http://localhost:9090/
 ```
 
