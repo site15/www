@@ -32,6 +32,7 @@ jobs:
 
       - name: Build and push Docker images (static)
         uses: docker/build-push-action@v1
+        if: ${{ github.event_name == 'push' }}
         with:
           dockerfile: docker/prod/Dockerfile.site15-static
           username: endykaufman
@@ -42,6 +43,7 @@ jobs:
 
       - name: Build and push Docker images (server)
         uses: docker/build-push-action@v1
+        if: ${{ github.event_name == 'push' }}
         with:
           dockerfile: docker/prod/Dockerfile.site15-server
           username: endykaufman
@@ -52,6 +54,7 @@ jobs:
 
       - name: Copy K8S files to host
         uses: appleboy/scp-action@master
+        if: ${{ github.event_name == 'push' }}
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
@@ -62,6 +65,7 @@ jobs:
 
       - name: Apply to K8S
         uses: appleboy/ssh-action@master
+        if: ${{ github.event_name == 'push' }}
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}

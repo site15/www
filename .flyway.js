@@ -1,5 +1,5 @@
 const { ConnectionString } = require('connection-string');
-const connectionString = new ConnectionString(process.env.POSTGRES_URL);
+const cs = new ConnectionString(process.env.POSTGRES_URL);
 
 const {
   user: USERNAME,
