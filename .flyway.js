@@ -6,7 +6,7 @@ const {
   password: PASSWORD,
   HOST = cs.hosts && cs.hosts[0].toString(),
   DATABASE = cs.path && cs.path[0],
-  SCHEMA = cs.parsms && cs.params.schema,
+  SCHEMA = cs.params && cs.params.schema,
   SCHEMAS = cs.params && cs.params.schemas
 } = cs;
       
