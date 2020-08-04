@@ -73,3 +73,7 @@ jobs:
           script: |
             cd ./vps/site15.ru
             ./k8s/prod/apply.sh
+            POSTGRES_URL=postgres://postgres:postgres@${{ secrets.HOST }}:32432/site15?schema=public
+            REDIS_URL=redis://${{ secrets.HOST }}:32379
+            npm run migrate
+            /snap/bin/microk8s kubectl delete service postgres -n postgres-prod
