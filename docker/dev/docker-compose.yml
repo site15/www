@@ -17,6 +17,8 @@ services:
     ports:
       - "9090:9090"
     container_name: "site15-nginx"
+    env_file:
+    - ../../.env
     volumes:
       - ./nginx:/etc/nginx/conf.d
       - ./logs:/var/log/nginx/
@@ -30,6 +32,8 @@ services:
     image: "node:12"
     user: $UID:$GID
     container_name: "site15-client-service"
+    env_file:
+    - ../../.env
     working_dir: "/app"
     volumes:
       - ./../../:/app
@@ -44,6 +48,10 @@ services:
     image: "node:12"
     user: $UID:$GID
     container_name: "site15-server-service"
+    env_file:
+    - ../../.env
+    environment:
+      - POSTGRES_URL=postgres://postgres:postgres@site15-postgres:5432/site15?schema=public
     working_dir: "/app"
     volumes:
       - ./../../:/app
@@ -53,3 +61,36 @@ services:
       - "5000:5000"
     command: "npm run start:dev:server"
     tty: true
+    depends_on:
+      - site15-postgres
+      - site15-redis
+
+  site15-postgres:
+    container_name: "site15-postgres"
+    image: "postgres:12"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=site15
+    env_file:
+    - ../../.env
+    ports:
+      - "15432:5432"
+    volumes:
+      - site15-postgresql:/var/lib/postgresql/site15_data
+    networks:
+      - site15-network
+
+  site15-redis:
+    image: redis:6-alpine
+    container_name: "site15-redis"
+    env_file:
+    - ../../.env
+    command: ["redis-server"]
+    ports:
+      - "16379:6379"
+    volumes:
+      - site15-redis:/data
+    networks:
+      - site15-network
+    restart: always
