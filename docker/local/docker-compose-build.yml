@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  site15-nginx-server-with-static:
+    image: 'site15/server-with-static:local'
+    build:
+      context: ../../
+      dockerfile: ./docker/prod/Dockerfile.site15-server-with-static
+
+  site15-server:
+    image: 'site15/server:local'
+    build:
+      context: ../../
+      dockerfile: ./docker/prod/Dockerfile.site15-server
+    user: $UID:$GID
+
+  site15-nginx-static:
+    image: 'site15/static:local'
+    build:
+      context: ../../
+      dockerfile: ./docker/prod/Dockerfile.site15-static

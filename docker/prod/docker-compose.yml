@@ -54,7 +54,7 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=site15
     ports:
-      - "15432:5432"
+      - "32432:5432"
     volumes:
       - site15-postgresql:/var/lib/postgresql/site15_data
     networks:

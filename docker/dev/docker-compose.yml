@@ -75,7 +75,7 @@ services:
     env_file:
     - ../../.env
     ports:
-      - "15432:5432"
+      - "32432:5432"
     volumes:
       - site15-postgresql:/var/lib/postgresql/site15_data
     networks:
@@ -88,7 +88,7 @@ services:
     - ../../.env
     command: ["redis-server"]
     ports:
-      - "16379:6379"
+      - "32379:6379"
     volumes:
       - site15-redis:/data
     networks:

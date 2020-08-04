@@ -22,6 +22,9 @@ spec:
           imagePullPolicy: Never
           ports:
             - containerPort: 5000
+          envFrom:
+            - configMapRef:
+                name: site15-config
           resources:
             requests:
               memory: "64Mi"
