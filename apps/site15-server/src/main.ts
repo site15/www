@@ -11,7 +11,7 @@ import * as compression from 'compression';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const globalPrefix = 'api';
-  app.use(compression);
+  app.use(compression());
   app.setGlobalPrefix(globalPrefix);
   const port = process.env.PORT || 5000;
   await app.listen(port, () => {
