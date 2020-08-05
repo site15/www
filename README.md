@@ -152,4 +152,5 @@ microk8s kubectl get pods --all-namespaces -l app.kubernetes.io/name=ingress-ngi
 microk8s kubectl get all --all-namespaces
 microk8s kubectl describe certificate echo-tls
 microk8s kubectl delete namespace site15-local
+microk8s kubectl delete namespace postgres-local
 ```

@@ -1,6 +1,5 @@
 const { ConnectionString } = require('connection-string');
 const cs = new ConnectionString(process.env.POSTGRES_URL);
-
 const {
   user: USERNAME,
   password: PASSWORD,

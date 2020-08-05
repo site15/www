@@ -1,8 +1,8 @@
-cat <<EOF >./k8s/prod/postgres/services/global-service.yaml
+cat <<EOF >./k8s/$HOST_TYPE/postgres/services/global-service.yaml
 apiVersion: v1
 kind: Service
 metadata:
-  namespace: postgres-prod
+  namespace: postgres-$HOST_TYPE
   name: site15-global-postgres
   labels:
     app: postgres

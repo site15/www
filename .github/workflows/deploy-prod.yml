@@ -61,7 +61,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
-          source: "k8s/prod"
+          source: "k8s"
           target: "vps/site15.ru"
           rm: true
 
@@ -79,13 +79,14 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
           script: |
+            export HOST_TYPE=prod
             export ROOT_POSTGRES_USER=${{ secrets.ROOT_POSTGRES_USER }}
             export ROOT_POSTGRES_PASSWORD=${{ secrets.ROOT_POSTGRES_PASSWORD }}
             export POSTGRES_USER=${{ secrets.POSTGRES_USER }}
             export POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
             export POSTGRES_PORT=${{ secrets.POSTGRES_PORT }}
             cd ./vps/site15.ru
-            ./k8s/prod/apply.sh
+            ./k8s/apply.sh
 
   migrate-database:
     name: Apply migrations
@@ -143,10 +144,11 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
           script: |
+            export HOST_TYPE=prod
             export ROOT_POSTGRES_USER=${{ secrets.ROOT_POSTGRES_USER }}
             export ROOT_POSTGRES_PASSWORD=${{ secrets.ROOT_POSTGRES_PASSWORD }}
             export POSTGRES_USER=${{ secrets.POSTGRES_USER }}
             export POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
             export POSTGRES_PORT=${{ secrets.POSTGRES_PORT }}
             cd ./vps/site15.ru
-            ./k8s/prod/apply.sh
+            ./k8s/apply.sh

@@ -1,8 +1,8 @@
-cat <<EOF >./k8s/prod/postgres/1.configmap.yaml
+cat <<EOF >./k8s/$HOST_TYPE/postgres/1.configmap.yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  namespace: postgres-prod
+  namespace: postgres-$HOST_TYPE
   name: postgres-config
   labels:
     app: postgres
