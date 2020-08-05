@@ -118,8 +118,12 @@ microk8s kubectl create namespace cert-manager
 microk8s kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.26.1/deploy/static/mandatory.yaml
 microk8s kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.26.1/deploy/static/provider/cloud-generic.yaml
 microk8s kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v0.12.0/cert-manager.yaml
-microk8s kubectl create -f ./k8s/staging-issuer.yaml
-microk8s kubectl create -f ./k8s/prod-issuer.yaml
+microk8s kubectl get pods --namespace cert-manager
+# wait until all not set to Running, example
+# NAME                                       READY   STATUS    RESTARTS   AGE
+# cert-manager-85db5c4c87-n9lwb              1/1     Running   3          7d9h
+# cert-manager-cainjector-7959549c78-lkg69   1/1     Running   3          7d9h
+# cert-manager-webhook-5c8696f555-b7bzr      1/1     Running   3          7d9h
 npm run k8s:local:build-apply
 # open http://localhost/site15
 ```
@@ -132,12 +136,19 @@ microk8s enable dashboard dns registry ingress metrics-server storage
 microk8s kubectl create namespace cert-manager
 microk8s kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.26.1/deploy/static/mandatory.yaml
 microk8s kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.26.1/deploy/static/provider/cloud-generic.yaml
-microk8s kubectl get pods --all-namespaces -l app.kubernetes.io/name=ingress-nginx
 microk8s kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v0.12.0/cert-manager.yaml
 microk8s kubectl get pods --namespace cert-manager
-microk8s kubectl create -f ./k8s/staging-issuer.yaml
-microk8s kubectl create -f ./k8s/prod-issuer.yaml
+# wait until all not set to Running, example
+# NAME                                       READY   STATUS    RESTARTS   AGE
+# cert-manager-85db5c4c87-n9lwb              1/1     Running   3          7d9h
+# cert-manager-cainjector-7959549c78-lkg69   1/1     Running   3          7d9h
+# cert-manager-webhook-5c8696f555-b7bzr      1/1     Running   3          7d9h
 npm run k8s:local:apply
+```
+
+# Utils
+```
+microk8s kubectl get pods --all-namespaces -l app.kubernetes.io/name=ingress-nginx
 microk8s kubectl get all --all-namespaces
 microk8s kubectl describe certificate echo-tls
 microk8s kubectl delete namespace site15-local

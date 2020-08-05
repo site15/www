@@ -43,7 +43,7 @@
     "build:site15-client": "ng build site15-client --prod",
     "build:site15-server": "ng build site15-server --prod",
     "build:prod": "npm run build:site15-client && npm run build:site15-server",
-    "build": "npm run build:site15-client && npm run build:site15-server",
+    "build": "npm run build:prod",
     "migrate": "flyway -c .flyway.js migrate",
     "migrate:local": "export $(cat .env) && npm run migrate",
     "prisma:generate": "prisma generate",
