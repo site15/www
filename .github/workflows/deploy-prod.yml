@@ -1,14 +1,12 @@
-name: "Deploy Production"
+name: "Deploy to production"
 
 on:
   push:
     branches: [master]
-  pull_request:
-    branches: [master]
 
 jobs:
-  build:
-    name: Build
+  delivery-to-host:
+    name: Delivery to host
     runs-on: ubuntu-latest
 
     steps:
@@ -19,11 +17,6 @@ jobs:
           # a pull request then we can checkout the head.
           fetch-depth: 2
 
-      # If this run was triggered by a pull request event, then checkout
-      # the head of the pull request instead of the merge commit.
-      - run: git checkout HEAD^2
-        if: ${{ github.event_name == 'pull_request' }}
-
       - name: Cache node_modules
         id: cache_node_modules
         uses: actions/cache@v2
@@ -31,14 +24,6 @@ jobs:
           path: |
             **/node_modules
           key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
-
-      - name: Cache migrations
-        id: cache_migrations
-        uses: actions/cache@v2
-        with:
-          path: |
-            **/migrations
-          key: ${{ runner.os }}-${{ hashFiles('**/migrations/**/*', '**/.github/workflow/deploy-prod.yml') }}
 
       - name: Install packages
         run: npm install
@@ -80,6 +65,11 @@ jobs:
           target: "vps/site15.ru"
           rm: true
 
+  apply-k8s-changes:
+    name: Apply changes
+    runs-on: ubuntu-latest
+
+    steps:
       - name: Apply to K8S
         uses: appleboy/ssh-action@master
         if: ${{ github.event_name == 'push' }}        
@@ -93,9 +83,23 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
+          envs: ROOT_POSTGRES_USER,ROOT_POSTGRES_PASSWORD,POSTGRES_USER,POSTGRES_PASSWORD,POSTGRES_PORT
           script: |
             cd ./vps/site15.ru
             ./k8s/prod/apply.sh
+
+  migrate-database:
+    name: Apply migrations
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Cache migrations
+        id: cache_migrations
+        uses: actions/cache@v2
+        with:
+          path: |
+            **/migrations
+          key: ${{ runner.os }}-${{ hashFiles('**/migrations/**/*', '**/.github/workflow/deploy-prod.yml') }}
 
       - name: Open database in K8S for internet
         uses: appleboy/ssh-action@master
