@@ -99,7 +99,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
           script: |
-            /snap/bin/microk8s kubectl apply -f ./vps/site15.ru/k8s/local/postgres/services
+            /snap/bin/microk8s kubectl apply -f ./vps/site15.ru/k8s/prod/postgres/services
 
       - name: Apply migrations on host
         run: npm run migrate
