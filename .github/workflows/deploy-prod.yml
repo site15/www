@@ -30,7 +30,7 @@ jobs:
         with:
           path: |
             **/node_modules
-          key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json', '**/.github/workflow/deploy-prod.yml') }}
+          key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
 
       - name: Cache migrations
         id: cache_migrations
@@ -116,4 +116,4 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
           script: |
-            /snap/bin/microk8s kubectl delete service postgres -n postgres-prod
+            /snap/bin/microk8s kubectl apply -f ./vps/site15.ru/k8s/prod/postgres
