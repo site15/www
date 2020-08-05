@@ -135,7 +135,7 @@ jobs:
           script: |
             /snap/bin/microk8s kubectl delete service site15-global-postgres -n postgres-prod
 
-      - name: Apply to K8S if migration changed
+      - name: Apply to K8S if migrations changed
         uses: appleboy/ssh-action@master
         if: ${{ github.event_name == 'push' && steps.cache_migrations.outputs.cache-hit != 'true'}}
         with:
