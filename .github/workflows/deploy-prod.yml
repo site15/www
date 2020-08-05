@@ -73,7 +73,19 @@ jobs:
           script: |
             cd ./vps/site15.ru
             ./k8s/prod/apply.sh
+
+      - name: Apply migrations on host
+        run: |
             POSTGRES_URL=postgres://postgres:postgres@${{ secrets.HOST }}:32432/site15?schema=public
             REDIS_URL=redis://${{ secrets.HOST }}:32379
             npm run migrate
+
+      - name: Close database in K8S for internet
+        uses: appleboy/ssh-action@master
+        if: ${{ github.event_name == 'push' }}
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          script: |
             /snap/bin/microk8s kubectl delete service postgres -n postgres-prod
