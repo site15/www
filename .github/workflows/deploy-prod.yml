@@ -73,19 +73,17 @@ jobs:
     steps:
       - name: Apply to K8S
         uses: appleboy/ssh-action@master
-        if: ${{ github.event_name == 'push' }}        
-        env:
-          ROOT_POSTGRES_USER: ${{ secrets.ROOT_POSTGRES_USER }}
-          ROOT_POSTGRES_PASSWORD: ${{ secrets.ROOT_POSTGRES_PASSWORD }}
-          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-          POSTGRES_PORT: ${{ secrets.POSTGRES_PORT }}
+        if: ${{ github.event_name == 'push' }}
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
-          envs: ROOT_POSTGRES_USER,ROOT_POSTGRES_PASSWORD,POSTGRES_USER,POSTGRES_PASSWORD,POSTGRES_PORT
           script: |
+            export ROOT_POSTGRES_USER=${{ secrets.ROOT_POSTGRES_USER }}
+            export ROOT_POSTGRES_PASSWORD=${{ secrets.ROOT_POSTGRES_PASSWORD }}
+            export POSTGRES_USER=${{ secrets.POSTGRES_USER }}
+            export POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
+            export POSTGRES_PORT=${{ secrets.POSTGRES_PORT }}
             cd ./vps/site15.ru
             ./k8s/prod/apply.sh
 
