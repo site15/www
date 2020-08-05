@@ -5,7 +5,8 @@ import { AppService } from './app.service';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  private prisma = new PrismaClient();
+  constructor(private readonly appService: AppService) { }
 
   @Get('hello')
   getData(): Message {
@@ -14,7 +15,6 @@ export class AppController {
 
   @Get('db')
   getDbData() {
-    const prisma = new PrismaClient();
-    return prisma.projectType.findMany({ select: { id: true, name: true } });
+    return this.prisma.projectType.findMany({ select: { id: true, name: true } });
   }
 }
