@@ -24,9 +24,26 @@ jobs:
       - run: git checkout HEAD^2
         if: ${{ github.event_name == 'pull_request' }}
 
+      - name: Cache node_modules
+        id: cache_node_modules
+        uses: actions/cache@v2
+        with:
+          path: |
+            **/node_modules
+          key: ${{ runner.os }}-${{ hashFiles('**/migrations/**/*','**/package-lock.json') }}
+
+      - name: Cache migrations
+        id: cache_migrations
+        uses: actions/cache@v2
+        with:
+          path: |
+            **/migrations
+          key: ${{ runner.os }}-${{ hashFiles('**/migrations/**/*') }}
+
       - name: Install packages
         run: npm install
-
+        if: ${{steps.cache_node_modules.outputs.cache-hit != 'true' }}
+        
       - name: Run build server
         run: npm run build:prod
 
@@ -74,15 +91,26 @@ jobs:
             cd ./vps/site15.ru
             ./k8s/prod/apply.sh
 
+      - name: Open database in K8S for internet
+        uses: appleboy/ssh-action@master
+        if: ${{ github.event_name == 'push' && steps.cache_migrations.outputs.cache-hit != 'true' }}
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          script: |
+            /snap/bin/microk8s kubectl apply -f ./vps/site15.ruk8s/local/postgres/services
+
       - name: Apply migrations on host
         run: npm run migrate
+        if: ${{ github.event_name == 'push' && steps.cache_migrations.outputs.cache-hit != 'true' }}
         env:
-          POSTGRES_URL=postgres://postgres:postgres@${{ secrets.HOST }}:32432/site15?schema=public
-          REDIS_URL=redis://${{ secrets.HOST }}:32379
+          POSTGRES_URL: postgres://postgres:postgres@${{ secrets.HOST }}:32432/site15?schema=public
+          REDIS_URL: redis://${{ secrets.HOST }}:32379
 
       - name: Close database in K8S for internet
         uses: appleboy/ssh-action@master
-        if: ${{ github.event_name == 'push' }}
+        if: ${{ github.event_name == 'push' && steps.cache_migrations.outputs.cache-hit != 'true' }}
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
