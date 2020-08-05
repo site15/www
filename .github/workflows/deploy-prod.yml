@@ -67,6 +67,7 @@ jobs:
 
   apply-k8s-changes:
     name: Apply changes
+    needs: [delivery-to-host]
     runs-on: ubuntu-latest
 
     steps:
@@ -90,6 +91,7 @@ jobs:
 
   migrate-database:
     name: Apply migrations
+    needs: [delivery-to-host, apply-k8s-changes]
     runs-on: ubuntu-latest
 
     steps:
