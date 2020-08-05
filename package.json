@@ -37,6 +37,7 @@
     "k8s:local:apply": "./k8s/local/apply.sh && npm run migrate:local",
     "k8s:local:build-apply": "npm run build:local && ./k8s/local/build-apply.sh && npm run migrate:local",
     "k8s:local:dashboard": "microk8s dashboard-proxy",
+    "k8s:prod:apply": "export $(cat .env) && ./k8s/prod/apply.sh && npm run migrate",
     "build:local:site15-client": "ng build site15-client --base-href /site15/ --configuration=local",
     "build:local:site15-server": "ng build site15-server",
     "build:local": "npm run build:local:site15-client && npm run build:local:site15-server",

@@ -82,7 +82,13 @@ jobs:
 
       - name: Apply to K8S
         uses: appleboy/ssh-action@master
-        if: ${{ github.event_name == 'push' }}
+        if: ${{ github.event_name == 'push' }}        
+        env:
+          ROOT_POSTGRES_USER: ${{ secrets.ROOT_POSTGRES_USER }}
+          ROOT_POSTGRES_PASSWORD: ${{ secrets.ROOT_POSTGRES_PASSWORD }}
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_PORT: ${{ secrets.POSTGRES_PORT }}
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
@@ -105,7 +111,7 @@ jobs:
         run: npm run migrate
         if: ${{ github.event_name == 'push' && steps.cache_migrations.outputs.cache-hit != 'true' }}
         env:
-          POSTGRES_URL: postgres://postgres:postgres@${{ secrets.HOST }}:32432/site15?schema=public
+          POSTGRES_URL: postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@${{ secrets.HOST }}:${{ secrets.POSTGRES_PORT }}/site15?schema=public
           REDIS_URL: redis://${{ secrets.HOST }}:32379
 
       - name: Close database in K8S for internet
@@ -116,4 +122,4 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
           script: |
-            /snap/bin/microk8s kubectl apply -f ./vps/site15.ru/k8s/prod/postgres
+            /snap/bin/microk8s kubectl delete service site15-global-postgres -n postgres-prod

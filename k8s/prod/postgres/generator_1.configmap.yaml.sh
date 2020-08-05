@@ -1,3 +1,4 @@
+cat <<EOF >./k8s/prod/postgres/1.configmap.yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -6,5 +7,6 @@ metadata:
   labels:
     app: postgres
 data:
-  POSTGRES_USER: postgres
-  POSTGRES_PASSWORD: postgres
+  POSTGRES_USER: $POSTGRES_USER
+  POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+EOF

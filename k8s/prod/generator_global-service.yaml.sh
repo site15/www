@@ -1,3 +1,4 @@
+cat <<EOF >./k8s/prod/postgres/services/global-service.yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -9,6 +10,7 @@ spec:
   type: NodePort
   ports:
     - port: 5432
-      nodePort: 32432
+      nodePort: $POSTGRES_PORT
   selector:
     app: postgres
+EOF
