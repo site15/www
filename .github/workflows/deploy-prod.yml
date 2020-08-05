@@ -30,7 +30,7 @@ jobs:
         with:
           path: |
             **/node_modules
-          key: ${{ runner.os }}-${{ hashFiles('**/migrations/**/*','**/package-lock.json') }}
+          key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json', '**/.github/workflow/deploy-prod.yml') }}
 
       - name: Cache migrations
         id: cache_migrations
@@ -38,7 +38,7 @@ jobs:
         with:
           path: |
             **/migrations
-          key: ${{ runner.os }}-${{ hashFiles('**/migrations/**/*') }}
+          key: ${{ runner.os }}-${{ hashFiles('**/migrations/**/*', '**/.github/workflow/deploy-prod.yml') }}
 
       - name: Install packages
         run: npm install
@@ -99,7 +99,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
           script: |
-            /snap/bin/microk8s kubectl apply -f ./vps/site15.ruk8s/local/postgres/services
+            /snap/bin/microk8s kubectl apply -f ./vps/site15.ru/k8s/local/postgres/services
 
       - name: Apply migrations on host
         run: npm run migrate
