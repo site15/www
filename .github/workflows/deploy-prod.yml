@@ -75,10 +75,10 @@ jobs:
             ./k8s/prod/apply.sh
 
       - name: Apply migrations on host
-        run: |
-            POSTGRES_URL=postgres://postgres:postgres@${{ secrets.HOST }}:32432/site15?schema=public
-            REDIS_URL=redis://${{ secrets.HOST }}:32379
-            npm run migrate
+        run: npm run migrate
+        env:
+          POSTGRES_URL=postgres://postgres:postgres@${{ secrets.HOST }}:32432/site15?schema=public
+          REDIS_URL=redis://${{ secrets.HOST }}:32379
 
       - name: Close database in K8S for internet
         uses: appleboy/ssh-action@master
