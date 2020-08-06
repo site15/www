@@ -7,13 +7,13 @@
     "prisma:generate": "prisma generate"
   },
   "dependencies": {
-    "rxjs": "6.6.0",
-    "zone.js": "0.10.3",
-    "@nestjs/common": "7.3.2",
-    "@nestjs/core": "7.3.2",
-    "@nestjs/platform-express": "7.3.2",
-    "reflect-metadata": "0.1.13",
-    "@prisma/client": "^2.3.0",
+    "rxjs": "~6.6.2",
+    "zone.js": "^0.10.3",
+    "@nestjs/common": "^7.4.2",
+    "@nestjs/core": "^7.4.2",
+    "@nestjs/platform-express": "^7.4.2",
+    "reflect-metadata": "^0.1.13",
+    "@prisma/client": "^2.4.1",
     "@prisma/cli": "^2.3.0",
     "compression": "^1.7.4"
   }
