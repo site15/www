@@ -13,7 +13,7 @@ volumes:
 
 services:
   site15-nginx:
-    image: nginx:latest
+    image: nginx:alpine
     ports:
       - "9090:9090"
     container_name: "site15-nginx"
@@ -29,7 +29,7 @@ services:
       - site15-server
 
   site15-client:
-    image: "node:12"
+    image: node:alpine
     user: $UID:$GID
     container_name: "site15-client-service"
     env_file:
@@ -45,7 +45,7 @@ services:
     tty: true
 
   site15-server:
-    image: "node:12"
+    image: node:alpine
     user: $UID:$GID
     container_name: "site15-server-service"
     env_file:
