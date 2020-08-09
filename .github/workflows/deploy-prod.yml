@@ -30,7 +30,9 @@ jobs:
         if: ${{steps.cache_node_modules.outputs.cache-hit != 'true' }}
 
       - name: Run build code
-        run: npm run build:prod
+        run: |
+          npm run k8s:generator:build
+          npm run build:prod
 
       - name: Run generate K8S files
         run: |

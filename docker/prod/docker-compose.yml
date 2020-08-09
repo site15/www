@@ -34,7 +34,7 @@ services:
     user: $UID:$GID
     container_name: "site15-server-service"
     env_file:
-    - ../../env/prod.env
+      - ../../env/prod.env
     environment:
       - POSTGRES_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@site15-postgres:${POSTGRES_INTERNAL_PORT}/${POSTGRES_DATABASE}?schema=public
     build:
@@ -56,7 +56,7 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DATABASE}
     env_file:
-    - ../../env/prod.env
+      - ../../env/prod.env
     # for expose db to internet for run migrations
     ports:
       - "${POSTGRES_PORT}:${POSTGRES_INTERNAL_PORT}"
@@ -70,7 +70,7 @@ services:
     image: redis:6-alpine
     container_name: "site15-redis"
     env_file:
-    - ../../env/prod.env
+      - ../../env/prod.env
     command: ["redis-server"]
     volumes:
       - site15-redis:/data

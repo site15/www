@@ -41,6 +41,10 @@ services:
       - "4200:4200"
     command: "npm run start:dev:client"
     tty: true
+    depends_on:
+      - site15-postgres
+      - site15-redis
+      - site15-server
 
   site15-server:
     image: node:12
