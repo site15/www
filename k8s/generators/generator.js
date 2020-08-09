@@ -49,7 +49,7 @@ var PROJECT_CONFIG = (_a = {},
             POSTGRES_URL: "postgres://" + POSTGRES_USER + ":" + POSTGRES_PASSWORD + "@postgres.postgres-" + process.env.HOST_TYPE + ":" + POSTGRES_INTERNAL_PORT + "/" + POSTGRES_DATABASE + "?schema=public"
         }
     },
-    _a["./k8s/" + HOST_TYPE + "/2.static-deployment.yml"] = {
+    _a["./k8s/" + HOST_TYPE + "/2.static-deployment.yaml"] = {
         apiVersion: "apps/v1",
         kind: "Deployment",
         metadata: {
@@ -106,7 +106,7 @@ var PROJECT_CONFIG = (_a = {},
             }
         }
     },
-    _a["./k8s/" + HOST_TYPE + "/3.server-deployment.yml"] = {
+    _a["./k8s/" + HOST_TYPE + "/3.server-deployment.yaml"] = {
         apiVersion: "apps/v1",
         kind: "Deployment",
         metadata: {
@@ -170,7 +170,7 @@ var PROJECT_CONFIG = (_a = {},
             }
         }
     },
-    _a["./k8s/" + HOST_TYPE + "/4.static-service.yml"] = {
+    _a["./k8s/" + HOST_TYPE + "/4.static-service.yaml"] = {
         kind: "Service",
         apiVersion: "v1",
         metadata: {
@@ -191,7 +191,7 @@ var PROJECT_CONFIG = (_a = {},
             type: "ClusterIP"
         }
     },
-    _a["./k8s/" + HOST_TYPE + "/5.server-service.yml"] = {
+    _a["./k8s/" + HOST_TYPE + "/5.server-service.yaml"] = {
         kind: "Service",
         apiVersion: "v1",
         metadata: {
@@ -212,7 +212,7 @@ var PROJECT_CONFIG = (_a = {},
             type: "ClusterIP"
         }
     },
-    _a["./k8s/" + HOST_TYPE + "/6.issuer.yml"] = {
+    _a["./k8s/" + HOST_TYPE + "/6.issuer.yaml"] = {
         apiVersion: "cert-manager.io/v1alpha2",
         kind: "ClusterIssuer",
         metadata: {
@@ -238,7 +238,7 @@ var PROJECT_CONFIG = (_a = {},
             }
         }
     },
-    _a["./k8s/" + HOST_TYPE + "/7.server-ingress.yml"] = {
+    _a["./k8s/" + HOST_TYPE + "/7.server-ingress.yaml"] = {
         apiVersion: "networking.k8s.io/v1beta1",
         kind: "Ingress",
         metadata: {
@@ -281,7 +281,7 @@ var PROJECT_CONFIG = (_a = {},
             ]
         }
     },
-    _a["./k8s/" + HOST_TYPE + "/8.static-ingress.yml"] = {
+    _a["./k8s/" + HOST_TYPE + "/8.static-ingress.yaml"] = {
         apiVersion: "networking.k8s.io/v1beta1",
         kind: "Ingress",
         metadata: {
@@ -347,6 +347,13 @@ var DATABASE_CONFIG = (_d = {},
             }
         }
     },
+    _d["./k8s/" + HOST_TYPE + "/postgres/0.namespace.yaml"] = {
+        apiVersion: "v1",
+        kind: "Namespace",
+        metadata: {
+            name: "postgres-" + HOST_TYPE
+        }
+    },
     _d["./k8s/" + HOST_TYPE + "/postgres/1.configmap.yaml"] = {
         apiVersion: "v1",
         kind: "ConfigMap",
@@ -362,10 +369,150 @@ var DATABASE_CONFIG = (_d = {},
             POSTGRES_PASSWORD: ROOT_POSTGRES_PASSWORD
         }
     },
+    _d["./k8s/" + HOST_TYPE + "/postgres/2.storage.yaml"] = [
+        {
+            kind: "PersistentVolume",
+            apiVersion: "v1",
+            metadata: {
+                namespace: "postgres-" + HOST_TYPE,
+                name: "postgres-pv-volume",
+                labels: {
+                    type: "local",
+                    app: "postgres"
+                }
+            },
+            spec: {
+                storageClassName: "manual",
+                capacity: {
+                    storage: "5Gi"
+                },
+                accessModes: ["ReadWriteMany"],
+                hostPath: {
+                    path: "/mnt/data"
+                }
+            }
+        },
+        {
+            kind: "PersistentVolumeClaim",
+            apiVersion: "v1",
+            metadata: {
+                namespace: "postgres-" + HOST_TYPE,
+                name: "postgres-pv-claim",
+                labels: {
+                    app: "postgres"
+                }
+            },
+            spec: {
+                storageClassName: "manual",
+                accessModes: ["ReadWriteMany"],
+                resources: {
+                    requests: {
+                        storage: "5Gi"
+                    }
+                }
+            }
+        },
+    ],
+    _d["./k8s/" + HOST_TYPE + "/postgres/3.deployment.yaml"] = {
+        apiVersion: "apps/v1",
+        kind: "Deployment",
+        metadata: {
+            namespace: "postgres-" + HOST_TYPE,
+            name: "postgres"
+        },
+        spec: {
+            replicas: 1,
+            selector: {
+                matchLabels: {
+                    pod: "postgres-container"
+                }
+            },
+            template: {
+                metadata: {
+                    namespace: "postgres-" + HOST_TYPE,
+                    labels: {
+                        app: "postgres",
+                        pod: "postgres-container"
+                    }
+                },
+                spec: {
+                    containers: [
+                        {
+                            name: "postgres",
+                            image: "postgres:12",
+                            imagePullPolicy: "IfNotPresent",
+                            ports: [
+                                {
+                                    containerPort: POSTGRES_INTERNAL_PORT
+                                },
+                            ],
+                            envFrom: [
+                                {
+                                    configMapRef: {
+                                        name: "postgres-config"
+                                    }
+                                },
+                            ],
+                            volumeMounts: [
+                                {
+                                    mountPath: "/var/lib/postgresql/data",
+                                    name: "postgredb"
+                                },
+                            ],
+                            resources: {
+                                requests: {
+                                    memory: "64Mi",
+                                    cpu: "250m"
+                                },
+                                limits: {
+                                    memory: "128Mi",
+                                    cpu: "500m"
+                                }
+                            }
+                        },
+                    ],
+                    volumes: [
+                        {
+                            name: "postgredb",
+                            persistentVolumeClaim: {
+                                claimName: "postgres-pv-claim"
+                            }
+                        },
+                    ]
+                }
+            }
+        }
+    },
+    _d["./k8s/" + HOST_TYPE + "/postgres/4.service.yaml"] = {
+        apiVersion: "v1",
+        kind: "Service",
+        metadata: {
+            namespace: "postgres-" + HOST_TYPE,
+            name: "postgres",
+            labels: {
+                app: "postgres"
+            }
+        },
+        spec: {
+            selector: {
+                app: 'postgres'
+            },
+            ports: [
+                {
+                    protocol: 'TCP',
+                    port: POSTGRES_INTERNAL_PORT,
+                    targetPort: POSTGRES_INTERNAL_PORT
+                },
+            ],
+            type: 'ClusterIP'
+        }
+    },
     _d);
 Object.keys(PROJECT_CONFIG).map(function (file) {
     return fs_1.writeFileSync(file, yaml_1.stringify(PROJECT_CONFIG[file]));
 });
 Object.keys(DATABASE_CONFIG).map(function (file) {
-    return fs_1.writeFileSync(file, yaml_1.stringify(DATABASE_CONFIG[file]));
+    return fs_1.writeFileSync(file, Array.isArray(DATABASE_CONFIG[file])
+        ? DATABASE_CONFIG[file].map(function (v) { return yaml_1.stringify(v); }).join("---\n")
+        : yaml_1.stringify(DATABASE_CONFIG[file]));
 });
