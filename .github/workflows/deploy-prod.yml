@@ -91,6 +91,7 @@ jobs:
           key: ${{ secrets.KEY }}
           script: |
             cd ./vps/site15.ru
+            export HOST_TYPE=${{ secrets.HOST_TYPE }}
             export POSTGRES_USER=${{ secrets.POSTGRES_USER }}
             export POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
             ./k8s/apply.sh
