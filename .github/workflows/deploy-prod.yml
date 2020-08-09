@@ -29,8 +29,19 @@ jobs:
         run: npm install
         if: ${{steps.cache_node_modules.outputs.cache-hit != 'true' }}        
 
-      - name: Run build server
+      - name: Run build code
         run: npm run build:prod
+
+      - name: Run generate K8S files
+        run: |
+            export $(cat ./env/prod.env)
+            export HOST=${{ secrets.HOST }}
+            export ROOT_POSTGRES_USER=${{ secrets.ROOT_POSTGRES_USER }}
+            export ROOT_POSTGRES_PASSWORD=${{ secrets.ROOT_POSTGRES_PASSWORD }}
+            export POSTGRES_USER=${{ secrets.POSTGRES_USER }}
+            export POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
+            export POSTGRES_PORT=${{ secrets.POSTGRES_PORT }}
+            node ./k8s/generators/generator.js
 
       - name: Build and push Docker images (static)
         uses: docker/build-push-action@v1
@@ -61,18 +72,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
-          source: "k8s"
-          target: "vps/site15.ru"
-          rm: true
-
-      - name: Copy env files to host
-        uses: appleboy/scp-action@master
-        if: ${{ github.event_name == 'push' }}
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.KEY }}
-          source: "env"
+          source: "k8s,env"
           target: "vps/site15.ru"
           rm: true
 
@@ -91,14 +91,8 @@ jobs:
           key: ${{ secrets.KEY }}
           script: |
             cd ./vps/site15.ru
-            export $(cat ./env/prod.env)
-            export HOST=${{ secrets.HOST }}
-            export ROOT_POSTGRES_USER=${{ secrets.ROOT_POSTGRES_USER }}
-            export ROOT_POSTGRES_PASSWORD=${{ secrets.ROOT_POSTGRES_PASSWORD }}
             export POSTGRES_USER=${{ secrets.POSTGRES_USER }}
             export POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
-            export POSTGRES_PORT=${{ secrets.POSTGRES_PORT }}
-            node ./k8s/generators/generator.js
             ./k8s/apply.sh
 
   migrate-database:
