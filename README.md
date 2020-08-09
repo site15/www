@@ -103,9 +103,15 @@ npm run docker:dev:up
 # open http://localhost:9090/
 ```
 
-# Run with docker-compose
+# Run with docker-compose in production
 ```bash
 npm run docker:prod:up
+# open http://localhost:9090/
+```
+
+# Run with docker-compose as production in local
+```bash
+npm run docker:prod-local:up
 # open http://localhost:9090/
 ```
 

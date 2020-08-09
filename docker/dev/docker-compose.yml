@@ -17,8 +17,6 @@ services:
     ports:
       - "9090:9090"
     container_name: "site15-nginx"
-    env_file:
-    - ../../env/local.env
     volumes:
       - ./nginx:/etc/nginx/conf.d
       - ./logs:/var/log/nginx/
@@ -51,7 +49,7 @@ services:
     env_file:
     - ../../env/local.env
     environment:
-      - POSTGRES_URL=postgres://postgres:postgres@site15-postgres:5432/site15?schema=public
+      - POSTGRES_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@site15-postgres:${POSTGRES_INTERNAL_PORT}/${POSTGRES_DATABASE}?schema=public
     working_dir: "/app"
     volumes:
       - ./../../:/app
@@ -69,13 +67,13 @@ services:
     image: "postgres:12"
     container_name: "site15-postgres"
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=site15
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DATABASE}
     env_file:
     - ../../env/local.env
     ports:
-      - "32432:5432"
+      - "${POSTGRES_PORT}:${POSTGRES_INTERNAL_PORT}"
     volumes:
       - site15-postgresql:/var/lib/postgresql/site15_data
     networks:
