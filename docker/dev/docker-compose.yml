@@ -29,7 +29,7 @@ services:
       - site15-server
 
   site15-client:
-    image: node:alpine
+    image: node:12
     user: $UID:$GID
     container_name: "site15-client-service"
     env_file:
@@ -45,7 +45,7 @@ services:
     tty: true
 
   site15-server:
-    image: node:alpine
+    image: node:12
     user: $UID:$GID
     container_name: "site15-server-service"
     env_file:
