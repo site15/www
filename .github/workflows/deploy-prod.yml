@@ -27,21 +27,21 @@ jobs:
 
       - name: Install packages
         run: npm install
-        if: ${{steps.cache_node_modules.outputs.cache-hit != 'true' }}        
+        if: ${{steps.cache_node_modules.outputs.cache-hit != 'true' }}
 
       - name: Run build code
         run: npm run build:prod
 
       - name: Run generate K8S files
         run: |
-            export $(cat ./env/prod.env)
-            export HOST=${{ secrets.HOST }}
-            export ROOT_POSTGRES_USER=${{ secrets.ROOT_POSTGRES_USER }}
-            export ROOT_POSTGRES_PASSWORD=${{ secrets.ROOT_POSTGRES_PASSWORD }}
-            export POSTGRES_USER=${{ secrets.POSTGRES_USER }}
-            export POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
-            export POSTGRES_PORT=${{ secrets.POSTGRES_PORT }}
-            node ./k8s/generators/generator.js
+          export $(cat ./env/prod.env)
+          export HOST=${{ secrets.HOST }}
+          export ROOT_POSTGRES_USER=${{ secrets.ROOT_POSTGRES_USER }}
+          export ROOT_POSTGRES_PASSWORD=${{ secrets.ROOT_POSTGRES_PASSWORD }}
+          export POSTGRES_USER=${{ secrets.POSTGRES_USER }}
+          export POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
+          export POSTGRES_PORT=${{ secrets.POSTGRES_PORT }}
+          node ./k8s/generators/generator.js
 
       - name: Build and push Docker images (static)
         uses: docker/build-push-action@v1
@@ -91,7 +91,8 @@ jobs:
           key: ${{ secrets.KEY }}
           script: |
             cd ./vps/site15.ru
-            export HOST_TYPE=${{ secrets.HOST_TYPE }}
+            export $(cat ./env/prod.env)
+            export HOST=${{ secrets.HOST }}
             export POSTGRES_USER=${{ secrets.POSTGRES_USER }}
             export POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
             ./k8s/apply.sh
@@ -108,7 +109,7 @@ jobs:
           # We must fetch at least the immediate parents so that if this is
           # a pull request then we can checkout the head.
           fetch-depth: 2
-          
+
       - name: Cache migrations
         id: cache_migrations
         uses: actions/cache@v2
@@ -152,11 +153,9 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
           script: |
-            export HOST_TYPE=prod
-            export ROOT_POSTGRES_USER=${{ secrets.ROOT_POSTGRES_USER }}
-            export ROOT_POSTGRES_PASSWORD=${{ secrets.ROOT_POSTGRES_PASSWORD }}
+            cd ./vps/site15.ru
+            export $(cat ./env/prod.env)
+            export HOST=${{ secrets.HOST }}
             export POSTGRES_USER=${{ secrets.POSTGRES_USER }}
             export POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
-            export POSTGRES_PORT=${{ secrets.POSTGRES_PORT }}
-            cd ./vps/site15.ru
             ./k8s/apply.sh
