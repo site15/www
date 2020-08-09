@@ -44,7 +44,7 @@
     "k8s:prod:apply": "export $(cat ./env/prod.env) && ./k8s/apply.sh && npm run migrate",
     "build:local:site15-client": "ng build site15-client --base-href /site15/ --configuration=local",
     "build:local:site15-server": "ng build site15-server",
-    "build:local": "npm run build:local:site15-client && npm run build:local:site15-server",
+    "build:local": "npm run k8s:generator:build && npm run build:local:site15-client && npm run build:local:site15-server",
     "build:site15-client": "ng build site15-client --prod",
     "build:site15-server": "ng build site15-server --prod",
     "build:prod": "npm run k8s:generator:build && npm run build:site15-client && npm run build:site15-server",

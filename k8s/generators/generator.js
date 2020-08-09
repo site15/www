@@ -495,16 +495,16 @@ var DATABASE_CONFIG = (_d = {},
         },
         spec: {
             selector: {
-                app: 'postgres'
+                app: "postgres"
             },
             ports: [
                 {
-                    protocol: 'TCP',
+                    protocol: "TCP",
                     port: POSTGRES_INTERNAL_PORT,
                     targetPort: POSTGRES_INTERNAL_PORT
                 },
             ],
-            type: 'ClusterIP'
+            type: "ClusterIP"
         }
     },
     _d);

@@ -143,7 +143,7 @@ microk8s kubectl get pods --namespace cert-manager
 # cert-manager-85db5c4c87-n9lwb              1/1     Running   3          7d9h
 # cert-manager-cainjector-7959549c78-lkg69   1/1     Running   3          7d9h
 # cert-manager-webhook-5c8696f555-b7bzr      1/1     Running   3          7d9h
-npm run k8s:local:apply
+npm run k8s:local:build-apply
 ```
 
 # Utils
