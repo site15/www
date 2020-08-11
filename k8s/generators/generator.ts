@@ -25,14 +25,14 @@ const ROOT_POSTGRES_USER =
   process.env.ROOT_POSTGRES_USER || `${PROJECT_NAME}_admin`;
 const ROOT_POSTGRES_PASSWORD =
   process.env.ROOT_POSTGRES_PASSWORD || POSTGRES_PASSWORD;
-const DOCKER_STATIC_IMAGE = process.env.DOCKER_STATIC_IMAGE;
-const DOCKER_SERVER_IMAGE = process.env.DOCKER_SERVER_IMAGE;
+const DOCKER_FRONTEND_IMAGE = process.env.DOCKER_FRONTEND_IMAGE;
+const DOCKER_BACKEND_IMAGE = process.env.DOCKER_BACKEND_IMAGE;
 const LETSENCRYPT_EMAIL = process.env.LETSENCRYPT_EMAIL;
 const PROJECT_DOMAIN = process.env.PROJECT_DOMAIN;
-const PROJECT_SERVER_INGRESS_PATH = process.env.PROJECT_SERVER_INGRESS_PATH;
-const PROJECT_STATIC_INGRESS_PATH = process.env.PROJECT_STATIC_INGRESS_PATH;
-const PROJECT_STATIC_INGRESS_REWRITE_TARGET =
-  process.env.PROJECT_STATIC_INGRESS_REWRITE_TARGET;
+const PROJECT_BACKEND_INGRESS_PATH = process.env.PROJECT_BACKEND_INGRESS_PATH;
+const PROJECT_FRONTEND_INGRESS_PATH = process.env.PROJECT_FRONTEND_INGRESS_PATH;
+const PROJECT_FRONTEND_INGRESS_REWRITE_TARGET =
+  process.env.PROJECT_FRONTEND_INGRESS_REWRITE_TARGET;
 
 const PROJECT_CONFIG = {
   [`./k8s/${HOST_TYPE}/0.namespace.yaml`]: <Namespace>{
@@ -53,35 +53,35 @@ const PROJECT_CONFIG = {
       POSTGRES_URL: `postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres.postgres-${process.env.HOST_TYPE}:${POSTGRES_INTERNAL_PORT}/${POSTGRES_DATABASE}?schema=public`,
     },
   },
-  [`./k8s/${HOST_TYPE}/2.static-deployment.yaml`]: <Deployment>{
+  [`./k8s/${HOST_TYPE}/2.frontend-deployment.yaml`]: <Deployment>{
     apiVersion: `apps/v1`,
     kind: `Deployment`,
     metadata: {
       namespace: `${PROJECT_NAME}-${HOST_TYPE}`,
-      name: `${PROJECT_NAME}-static`,
+      name: `${PROJECT_NAME}-frontend`,
       labels: {
-        app: `${PROJECT_NAME}-static`,
+        app: `${PROJECT_NAME}-frontend`,
       },
     },
     spec: {
       replicas: 1,
       selector: {
         matchLabels: {
-          pod: `${PROJECT_NAME}-static-container`,
+          pod: `${PROJECT_NAME}-frontend-container`,
         },
       },
       template: {
         metadata: {
           namespace: `${PROJECT_NAME}-${HOST_TYPE}`,
           labels: {
-            pod: `${PROJECT_NAME}-static-container`,
+            pod: `${PROJECT_NAME}-frontend-container`,
           },
         },
         spec: {
           containers: [
             {
-              name: `${PROJECT_NAME}-static`,
-              image: DOCKER_STATIC_IMAGE,
+              name: `${PROJECT_NAME}-frontend`,
+              image: DOCKER_FRONTEND_IMAGE,
               imagePullPolicy:
                 HOST_TYPE === HostType.Local ? `Never` : `Always`,
               ports: [
@@ -114,35 +114,35 @@ const PROJECT_CONFIG = {
       },
     },
   },
-  [`./k8s/${HOST_TYPE}/3.server-deployment.yaml`]: <Deployment>{
+  [`./k8s/${HOST_TYPE}/3.backend-deployment.yaml`]: <Deployment>{
     apiVersion: `apps/v1`,
     kind: `Deployment`,
     metadata: {
       namespace: `${PROJECT_NAME}-${HOST_TYPE}`,
-      name: `${PROJECT_NAME}-server`,
+      name: `${PROJECT_NAME}-backend`,
       labels: {
-        app: `${PROJECT_NAME}-server`,
+        app: `${PROJECT_NAME}-backend`,
       },
     },
     spec: {
       replicas: 1,
       selector: {
         matchLabels: {
-          pod: `${PROJECT_NAME}-server-container`,
+          pod: `${PROJECT_NAME}-backend-container`,
         },
       },
       template: {
         metadata: {
           namespace: `${PROJECT_NAME}-${HOST_TYPE}`,
           labels: {
-            pod: `${PROJECT_NAME}-server-container`,
+            pod: `${PROJECT_NAME}-backend-container`,
           },
         },
         spec: {
           containers: [
             {
-              name: `${PROJECT_NAME}-server`,
-              image: DOCKER_SERVER_IMAGE,
+              name: `${PROJECT_NAME}-backend`,
+              image: DOCKER_BACKEND_IMAGE,
               imagePullPolicy:
                 HOST_TYPE === HostType.Local ? `Never` : `Always`,
               ports: [
@@ -183,16 +183,16 @@ const PROJECT_CONFIG = {
       },
     },
   },
-  [`./k8s/${HOST_TYPE}/4.static-service.yaml`]: <Service>{
+  [`./k8s/${HOST_TYPE}/4.frontend-service.yaml`]: <Service>{
     kind: `Service`,
     apiVersion: `v1`,
     metadata: {
       namespace: `${PROJECT_NAME}-${HOST_TYPE}`,
-      name: `${PROJECT_NAME}-static-service`,
+      name: `${PROJECT_NAME}-frontend-service`,
     },
     spec: {
       selector: {
-        pod: `${PROJECT_NAME}-static-container`,
+        pod: `${PROJECT_NAME}-frontend-container`,
       },
       ports: [
         {
@@ -204,16 +204,16 @@ const PROJECT_CONFIG = {
       type: `ClusterIP`,
     },
   },
-  [`./k8s/${HOST_TYPE}/5.server-service.yaml`]: <Service>{
+  [`./k8s/${HOST_TYPE}/5.backend-service.yaml`]: <Service>{
     kind: `Service`,
     apiVersion: `v1`,
     metadata: {
       namespace: `${PROJECT_NAME}-${HOST_TYPE}`,
-      name: `${PROJECT_NAME}-server-service`,
+      name: `${PROJECT_NAME}-backend-service`,
     },
     spec: {
       selector: {
-        pod: `${PROJECT_NAME}-server-container`,
+        pod: `${PROJECT_NAME}-backend-container`,
       },
       ports: [
         {
@@ -251,12 +251,12 @@ const PROJECT_CONFIG = {
       },
     },
   },
-  [`./k8s/${HOST_TYPE}/7.server-ingress.yaml`]: <Ingress>{
+  [`./k8s/${HOST_TYPE}/7.backend-ingress.yaml`]: <Ingress>{
     apiVersion: `networking.k8s.io/v1beta1`,
     kind: `Ingress`,
     metadata: {
       namespace: `${PROJECT_NAME}-${HOST_TYPE}`,
-      name: `${PROJECT_NAME}-server-ingress`,
+      name: `${PROJECT_NAME}-backend-ingress`,
       annotations: {
         [`kubernetes.io/ingress.class`]: `nginx`,
         [`cert-manager.io/cluster-issuer`]: `letsencrypt-${HOST_TYPE}`,
@@ -265,8 +265,8 @@ const PROJECT_CONFIG = {
         [`nginx.ingress.kubernetes.io/rewrite-target`]: `/api/$2`,
         [`nginx.ingress.kubernetes.io/secure-backends`]: `true`,
         [`nginx.ingress.kubernetes.io/ssl-redirect`]: `true`,
-        [`nginx.ingress.kubernetes.io/websocket-services`]: `${PROJECT_NAME}-server-service`,
-        [`nginx.org/websocket-services`]: `${PROJECT_NAME}-server-service`,
+        [`nginx.ingress.kubernetes.io/websocket-services`]: `${PROJECT_NAME}-backend-service`,
+        [`nginx.org/websocket-services`]: `${PROJECT_NAME}-backend-service`,
       },
     },
     spec: {
@@ -282,9 +282,9 @@ const PROJECT_CONFIG = {
           http: {
             paths: [
               {
-                path: PROJECT_SERVER_INGRESS_PATH,
+                path: PROJECT_BACKEND_INGRESS_PATH,
                 backend: {
-                  serviceName: `${PROJECT_NAME}-server-service`,
+                  serviceName: `${PROJECT_NAME}-backend-service`,
                   servicePort: 5000,
                 },
               },
@@ -294,18 +294,18 @@ const PROJECT_CONFIG = {
       ],
     },
   },
-  [`./k8s/${HOST_TYPE}/8.static-ingress.yaml`]: <Ingress>{
+  [`./k8s/${HOST_TYPE}/8.frontend-ingress.yaml`]: <Ingress>{
     apiVersion: `networking.k8s.io/v1beta1`,
     kind: `Ingress`,
     metadata: {
       namespace: `${PROJECT_NAME}-${HOST_TYPE}`,
-      name: `${PROJECT_NAME}-static-ingress`,
+      name: `${PROJECT_NAME}-frontend-ingress`,
       annotations: {
         [`kubernetes.io/ingress.class`]: `nginx`,
         [`cert-manager.io/cluster-issuer`]: `letsencrypt-${HOST_TYPE}`,
         [`nginx.ingress.kubernetes.io/proxy-read-timeout`]: `1800`,
         [`nginx.ingress.kubernetes.io/proxy-send-timeout`]: `1800`,
-        [`nginx.ingress.kubernetes.io/rewrite-target`]: PROJECT_STATIC_INGRESS_REWRITE_TARGET,
+        [`nginx.ingress.kubernetes.io/rewrite-target`]: PROJECT_FRONTEND_INGRESS_REWRITE_TARGET,
         [`nginx.ingress.kubernetes.io/secure-backends`]: `true`,
         [`nginx.ingress.kubernetes.io/ssl-redirect`]: `true`,
       },
@@ -323,9 +323,9 @@ const PROJECT_CONFIG = {
           http: {
             paths: [
               {
-                path: PROJECT_STATIC_INGRESS_PATH,
+                path: PROJECT_FRONTEND_INGRESS_PATH,
                 backend: {
-                  serviceName: `${PROJECT_NAME}-static-service`,
+                  serviceName: `${PROJECT_NAME}-frontend-service`,
                   servicePort: 9090,
                 },
               },

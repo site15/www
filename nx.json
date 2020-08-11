@@ -22,14 +22,14 @@
     }
   },
   "projects": {
-    "site15-client": {
+    "site15-frontend": {
       "tags": []
     },
-    "site15-client-e2e": {
+    "site15-frontend-e2e": {
       "tags": [],
-      "implicitDependencies": ["site15-client"]
+      "implicitDependencies": ["site15-frontend"]
     },
-    "site15-server": {
+    "site15-backend": {
       "tags": []
     },
     "common": {

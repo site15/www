@@ -45,26 +45,26 @@ jobs:
           export POSTGRES_PORT=${{ secrets.POSTGRES_PORT }}
           node ./k8s/generators/generator.js
 
-      - name: Build and push Docker images (static)
+      - name: Build and push Docker images (frontend)
         uses: docker/build-push-action@v1
         if: ${{ github.event_name == 'push' }}
         with:
-          dockerfile: docker/__Dockerfile/Dockerfile.site15-static
+          dockerfile: docker/__Dockerfile/Dockerfile.site15-frontend
           username: endykaufman
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
           registry: docker.io
-          repository: site15/site15-ru-static
+          repository: site15/site15-frontend
           tags: latest
 
-      - name: Build and push Docker images (server)
+      - name: Build and push Docker images (backend)
         uses: docker/build-push-action@v1
         if: ${{ github.event_name == 'push' }}
         with:
-          dockerfile: docker/__Dockerfile/Dockerfile.site15-server
+          dockerfile: docker/__Dockerfile/Dockerfile.site15-backend
           username: endykaufman
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
           registry: docker.io
-          repository: site15/site15-ru-server
+          repository: site15/site15-backend
           tags: latest
 
       - name: Copy K8S files to host

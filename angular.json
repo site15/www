@@ -1,36 +1,36 @@
 {
   "version": 1,
   "projects": {
-    "site15-client": {
+    "site15-frontend": {
       "projectType": "application",
       "schematics": {
         "@nrwl/angular:component": {
           "style": "scss"
         }
       },
-      "root": "apps/site15-client",
-      "sourceRoot": "apps/site15-client/src",
-      "prefix": "site15-client",
+      "root": "apps/site15-frontend",
+      "sourceRoot": "apps/site15-frontend/src",
+      "prefix": "site15-frontend",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/apps/site15-client",
-            "index": "apps/site15-client/src/index.html",
-            "main": "apps/site15-client/src/main.ts",
-            "polyfills": "apps/site15-client/src/polyfills.ts",
-            "tsConfig": "apps/site15-client/tsconfig.app.json",
+            "outputPath": "dist/apps/site15-frontend",
+            "index": "apps/site15-frontend/src/index.html",
+            "main": "apps/site15-frontend/src/main.ts",
+            "polyfills": "apps/site15-frontend/src/polyfills.ts",
+            "tsConfig": "apps/site15-frontend/tsconfig.app.json",
             "aot": true,
-            "assets": ["apps/site15-client/src/favicon.ico", "apps/site15-client/src/assets"],
-            "styles": ["apps/site15-client/src/styles.scss"],
+            "assets": ["apps/site15-frontend/src/favicon.ico", "apps/site15-frontend/src/assets"],
+            "styles": ["apps/site15-frontend/src/styles.scss"],
             "scripts": []
           },
           "configurations": {
             "local": {
               "fileReplacements": [
                 {
-                  "replace": "apps/site15-client/src/environments/environment.ts",
-                  "with": "apps/site15-client/src/environments/environment.local.ts"
+                  "replace": "apps/site15-frontend/src/environments/environment.ts",
+                  "with": "apps/site15-frontend/src/environments/environment.local.ts"
                 }
               ],
               "optimization": true,
@@ -57,8 +57,8 @@
             "production": {
               "fileReplacements": [
                 {
-                  "replace": "apps/site15-client/src/environments/environment.ts",
-                  "with": "apps/site15-client/src/environments/environment.prod.ts"
+                  "replace": "apps/site15-frontend/src/environments/environment.ts",
+                  "with": "apps/site15-frontend/src/environments/environment.prod.ts"
                 }
               ],
               "optimization": true,
@@ -87,78 +87,78 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "site15-client:build",
-            "proxyConfig": "apps/site15-client/proxy.conf.json"
+            "browserTarget": "site15-frontend:build",
+            "proxyConfig": "apps/site15-frontend/proxy.conf.json"
           },
           "configurations": {
             "local": {
-              "browserTarget": "site15-client:build:local"
+              "browserTarget": "site15-frontend:build:local"
             },
             "production": {
-              "browserTarget": "site15-client:build:production"
+              "browserTarget": "site15-frontend:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "site15-client:build"
+            "browserTarget": "site15-frontend:build"
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "apps/site15-client/tsconfig.app.json",
-              "apps/site15-client/tsconfig.spec.json"
+              "apps/site15-frontend/tsconfig.app.json",
+              "apps/site15-frontend/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!apps/site15-client/**/*"]
+            "exclude": ["**/node_modules/**", "!apps/site15-frontend/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
-            "jestConfig": "apps/site15-client/jest.config.js",
-            "tsConfig": "apps/site15-client/tsconfig.spec.json",
+            "jestConfig": "apps/site15-frontend/jest.config.js",
+            "tsConfig": "apps/site15-frontend/tsconfig.spec.json",
             "passWithNoTests": true,
-            "setupFile": "apps/site15-client/src/test-setup.ts"
+            "setupFile": "apps/site15-frontend/src/test-setup.ts"
           }
         }
       }
     },
-    "site15-client-e2e": {
-      "root": "apps/site15-client-e2e",
-      "sourceRoot": "apps/site15-client-e2e/src",
+    "site15-frontend-e2e": {
+      "root": "apps/site15-frontend-e2e",
+      "sourceRoot": "apps/site15-frontend-e2e/src",
       "projectType": "application",
       "architect": {
         "e2e": {
           "builder": "@nrwl/cypress:cypress",
           "options": {
-            "cypressConfig": "apps/site15-client-e2e/cypress.json",
-            "tsConfig": "apps/site15-client-e2e/tsconfig.e2e.json",
-            "devServerTarget": "site15-client:serve"
+            "cypressConfig": "apps/site15-frontend-e2e/cypress.json",
+            "tsConfig": "apps/site15-frontend-e2e/tsconfig.e2e.json",
+            "devServerTarget": "site15-frontend:serve"
           },
           "configurations": {
             "local": {
-              "devServerTarget": "site15-client:serve:local"
+              "devServerTarget": "site15-frontend:serve:local"
             },
             "production": {
-              "devServerTarget": "site15-client:serve:production"
+              "devServerTarget": "site15-frontend:serve:production"
             }
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["apps/site15-client-e2e/tsconfig.e2e.json"],
-            "exclude": ["**/node_modules/**", "!apps/site15-client-e2e/**/*"]
+            "tsConfig": ["apps/site15-frontend-e2e/tsconfig.e2e.json"],
+            "exclude": ["**/node_modules/**", "!apps/site15-frontend-e2e/**/*"]
           }
         }
       }
     },
-    "site15-server": {
-      "root": "apps/site15-server",
-      "sourceRoot": "apps/site15-server/src",
+    "site15-backend": {
+      "root": "apps/site15-backend",
+      "sourceRoot": "apps/site15-backend/src",
       "projectType": "application",
       "prefix": "api",
       "schematics": {},
@@ -166,10 +166,10 @@
         "build": {
           "builder": "@nrwl/node:build",
           "options": {
-            "outputPath": "dist/apps/site15-server",
-            "main": "apps/site15-server/src/main.ts",
-            "tsConfig": "apps/site15-server/tsconfig.app.json",
-            "assets": ["apps/site15-server/src/assets"]
+            "outputPath": "dist/apps/site15-backend",
+            "main": "apps/site15-backend/src/main.ts",
+            "tsConfig": "apps/site15-backend/tsconfig.app.json",
+            "assets": ["apps/site15-backend/src/assets"]
           },
           "configurations": {
             "local": {
@@ -178,8 +178,8 @@
               "inspect": false,
               "fileReplacements": [
                 {
-                  "replace": "apps/site15-server/src/environments/environment.ts",
-                  "with": "apps/site15-server/src/environments/environment.local.ts"
+                  "replace": "apps/site15-backend/src/environments/environment.ts",
+                  "with": "apps/site15-backend/src/environments/environment.local.ts"
                 }
               ]
             },
@@ -189,8 +189,8 @@
               "inspect": false,
               "fileReplacements": [
                 {
-                  "replace": "apps/site15-server/src/environments/environment.ts",
-                  "with": "apps/site15-server/src/environments/environment.prod.ts"
+                  "replace": "apps/site15-backend/src/environments/environment.ts",
+                  "with": "apps/site15-backend/src/environments/environment.prod.ts"
                 }
               ]
             }
@@ -199,24 +199,24 @@
         "serve": {
           "builder": "@nrwl/node:execute",
           "options": {
-            "buildTarget": "site15-server:build"
+            "buildTarget": "site15-backend:build"
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "apps/site15-server/tsconfig.app.json",
-              "apps/site15-server/tsconfig.spec.json"
+              "apps/site15-backend/tsconfig.app.json",
+              "apps/site15-backend/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!apps/site15-server/**/*"]
+            "exclude": ["**/node_modules/**", "!apps/site15-backend/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
-            "jestConfig": "apps/site15-server/jest.config.js",
-            "tsConfig": "apps/site15-server/tsconfig.spec.json",
+            "jestConfig": "apps/site15-backend/jest.config.js",
+            "tsConfig": "apps/site15-backend/tsconfig.spec.json",
             "passWithNoTests": true
           }
         }
@@ -261,5 +261,5 @@
       "unitTestRunner": "jest"
     }
   },
-  "defaultProject": "site15-client"
+  "defaultProject": "site15-frontend"
 }

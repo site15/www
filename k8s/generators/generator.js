@@ -23,13 +23,13 @@ var POSTGRES_PORT = +(process.env.POSTGRES_PORT || "5432");
 var POSTGRES_DATABASE = process.env.POSTGRES_DATABASE || PROJECT_NAME;
 var ROOT_POSTGRES_USER = process.env.ROOT_POSTGRES_USER || PROJECT_NAME + "_admin";
 var ROOT_POSTGRES_PASSWORD = process.env.ROOT_POSTGRES_PASSWORD || POSTGRES_PASSWORD;
-var DOCKER_STATIC_IMAGE = process.env.DOCKER_STATIC_IMAGE;
-var DOCKER_SERVER_IMAGE = process.env.DOCKER_SERVER_IMAGE;
+var DOCKER_FRONTEND_IMAGE = process.env.DOCKER_FRONTEND_IMAGE;
+var DOCKER_BACKEND_IMAGE = process.env.DOCKER_BACKEND_IMAGE;
 var LETSENCRYPT_EMAIL = process.env.LETSENCRYPT_EMAIL;
 var PROJECT_DOMAIN = process.env.PROJECT_DOMAIN;
-var PROJECT_SERVER_INGRESS_PATH = process.env.PROJECT_SERVER_INGRESS_PATH;
-var PROJECT_STATIC_INGRESS_PATH = process.env.PROJECT_STATIC_INGRESS_PATH;
-var PROJECT_STATIC_INGRESS_REWRITE_TARGET = process.env.PROJECT_STATIC_INGRESS_REWRITE_TARGET;
+var PROJECT_BACKEND_INGRESS_PATH = process.env.PROJECT_BACKEND_INGRESS_PATH;
+var PROJECT_FRONTEND_INGRESS_PATH = process.env.PROJECT_FRONTEND_INGRESS_PATH;
+var PROJECT_FRONTEND_INGRESS_REWRITE_TARGET = process.env.PROJECT_FRONTEND_INGRESS_REWRITE_TARGET;
 var PROJECT_CONFIG = (_a = {},
     _a["./k8s/" + HOST_TYPE + "/0.namespace.yaml"] = {
         apiVersion: "v1",
@@ -49,7 +49,7 @@ var PROJECT_CONFIG = (_a = {},
             POSTGRES_URL: "postgres://" + POSTGRES_USER + ":" + POSTGRES_PASSWORD + "@postgres.postgres-" + process.env.HOST_TYPE + ":" + POSTGRES_INTERNAL_PORT + "/" + POSTGRES_DATABASE + "?schema=public"
         }
     },
-    _a["./k8s/" + HOST_TYPE + "/2.static-deployment.yaml"] = {
+    _a["./k8s/" + HOST_TYPE + "/2.frontend-deployment.yaml"] = {
         apiVersion: "apps/v1",
         kind: "Deployment",
         metadata: {
@@ -76,7 +76,7 @@ var PROJECT_CONFIG = (_a = {},
                 spec: __assign({ containers: [
                         {
                             name: PROJECT_NAME + "-static",
-                            image: DOCKER_STATIC_IMAGE,
+                            image: DOCKER_FRONTEND_IMAGE,
                             imagePullPolicy: HOST_TYPE === "local" /* Local */ ? "Never" : "Always",
                             ports: [
                                 {
@@ -106,7 +106,7 @@ var PROJECT_CONFIG = (_a = {},
             }
         }
     },
-    _a["./k8s/" + HOST_TYPE + "/3.server-deployment.yaml"] = {
+    _a["./k8s/" + HOST_TYPE + "/3.backend-deployment.yaml"] = {
         apiVersion: "apps/v1",
         kind: "Deployment",
         metadata: {
@@ -133,7 +133,7 @@ var PROJECT_CONFIG = (_a = {},
                 spec: __assign({ containers: [
                         {
                             name: PROJECT_NAME + "-server",
-                            image: DOCKER_SERVER_IMAGE,
+                            image: DOCKER_BACKEND_IMAGE,
                             imagePullPolicy: HOST_TYPE === "local" /* Local */ ? "Never" : "Always",
                             ports: [
                                 {
@@ -170,7 +170,7 @@ var PROJECT_CONFIG = (_a = {},
             }
         }
     },
-    _a["./k8s/" + HOST_TYPE + "/4.static-service.yaml"] = {
+    _a["./k8s/" + HOST_TYPE + "/4.frontend-service.yaml"] = {
         kind: "Service",
         apiVersion: "v1",
         metadata: {
@@ -191,7 +191,7 @@ var PROJECT_CONFIG = (_a = {},
             type: "ClusterIP"
         }
     },
-    _a["./k8s/" + HOST_TYPE + "/5.server-service.yaml"] = {
+    _a["./k8s/" + HOST_TYPE + "/5.backend-service.yaml"] = {
         kind: "Service",
         apiVersion: "v1",
         metadata: {
@@ -238,7 +238,7 @@ var PROJECT_CONFIG = (_a = {},
             }
         }
     },
-    _a["./k8s/" + HOST_TYPE + "/7.server-ingress.yaml"] = {
+    _a["./k8s/" + HOST_TYPE + "/7.backend-ingress.yaml"] = {
         apiVersion: "networking.k8s.io/v1beta1",
         kind: "Ingress",
         metadata: {
@@ -269,7 +269,7 @@ var PROJECT_CONFIG = (_a = {},
                     http: {
                         paths: [
                             {
-                                path: PROJECT_SERVER_INGRESS_PATH,
+                                path: PROJECT_BACKEND_INGRESS_PATH,
                                 backend: {
                                     serviceName: PROJECT_NAME + "-server-service",
                                     servicePort: 5000
@@ -281,7 +281,7 @@ var PROJECT_CONFIG = (_a = {},
             ]
         }
     },
-    _a["./k8s/" + HOST_TYPE + "/8.static-ingress.yaml"] = {
+    _a["./k8s/" + HOST_TYPE + "/8.frontend-ingress.yaml"] = {
         apiVersion: "networking.k8s.io/v1beta1",
         kind: "Ingress",
         metadata: {
@@ -292,7 +292,7 @@ var PROJECT_CONFIG = (_a = {},
                 _c["cert-manager.io/cluster-issuer"] = "letsencrypt-" + HOST_TYPE,
                 _c["nginx.ingress.kubernetes.io/proxy-read-timeout"] = "1800",
                 _c["nginx.ingress.kubernetes.io/proxy-send-timeout"] = "1800",
-                _c["nginx.ingress.kubernetes.io/rewrite-target"] = PROJECT_STATIC_INGRESS_REWRITE_TARGET,
+                _c["nginx.ingress.kubernetes.io/rewrite-target"] = PROJECT_FRONTEND_INGRESS_REWRITE_TARGET,
                 _c["nginx.ingress.kubernetes.io/secure-backends"] = "true",
                 _c["nginx.ingress.kubernetes.io/ssl-redirect"] = "true",
                 _c)
@@ -310,7 +310,7 @@ var PROJECT_CONFIG = (_a = {},
                     http: {
                         paths: [
                             {
-                                path: PROJECT_STATIC_INGRESS_PATH,
+                                path: PROJECT_FRONTEND_INGRESS_PATH,
                                 backend: {
                                     serviceName: PROJECT_NAME + "-static-service",
                                     servicePort: 9090

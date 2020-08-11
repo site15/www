@@ -23,13 +23,13 @@ services:
     networks:
       - site15-network
     depends_on:
-      - site15-client
-      - site15-server
+      - site15-frontend
+      - site15-backend
 
-  site15-client:
+  site15-frontend:
     image: node:12
     user: $UID:$GID
-    container_name: "site15-client-service"
+    container_name: "site15-frontend-service"
     env_file:
     - ../../env/local.env
     working_dir: "/app"
@@ -39,17 +39,17 @@ services:
       - site15-network
     ports:
       - "4200:4200"
-    command: "npm run start:dev:client"
+    command: "npm run start:dev:frontend"
     tty: true
     depends_on:
       - site15-postgres
       - site15-redis
-      - site15-server
+      - site15-backend
 
-  site15-server:
+  site15-backend:
     image: node:12
     user: $UID:$GID
-    container_name: "site15-server-service"
+    container_name: "site15-backend-service"
     env_file:
     - ../../env/local.env
     environment:
@@ -61,7 +61,7 @@ services:
       - site15-network
     ports:
       - "5000:5000"
-    command: "npm run start:dev:server"
+    command: "npm run start:dev:backend"
     tty: true
     depends_on:
       - site15-postgres

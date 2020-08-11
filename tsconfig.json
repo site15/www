@@ -19,5 +19,5 @@
       "@site15/common": ["libs/common/src/index.ts"]
     }
   },
-  "exclude": ["node_modules", "tmp", "apps/site15-server/src/app/client"]
+  "exclude": ["node_modules", "tmp", "apps/site15-backend/src/app/client"]
 }
