@@ -54,28 +54,28 @@ var PROJECT_CONFIG = (_a = {},
         kind: "Deployment",
         metadata: {
             namespace: PROJECT_NAME + "-" + HOST_TYPE,
-            name: PROJECT_NAME + "-static",
+            name: PROJECT_NAME + "-frontend",
             labels: {
-                app: PROJECT_NAME + "-static"
+                app: PROJECT_NAME + "-frontend"
             }
         },
         spec: {
             replicas: 1,
             selector: {
                 matchLabels: {
-                    pod: PROJECT_NAME + "-static-container"
+                    pod: PROJECT_NAME + "-frontend-container"
                 }
             },
             template: {
                 metadata: {
                     namespace: PROJECT_NAME + "-" + HOST_TYPE,
                     labels: {
-                        pod: PROJECT_NAME + "-static-container"
+                        pod: PROJECT_NAME + "-frontend-container"
                     }
                 },
                 spec: __assign({ containers: [
                         {
-                            name: PROJECT_NAME + "-static",
+                            name: PROJECT_NAME + "-frontend",
                             image: DOCKER_FRONTEND_IMAGE,
                             imagePullPolicy: HOST_TYPE === "local" /* Local */ ? "Never" : "Always",
                             ports: [
@@ -111,28 +111,28 @@ var PROJECT_CONFIG = (_a = {},
         kind: "Deployment",
         metadata: {
             namespace: PROJECT_NAME + "-" + HOST_TYPE,
-            name: PROJECT_NAME + "-server",
+            name: PROJECT_NAME + "-backend",
             labels: {
-                app: PROJECT_NAME + "-server"
+                app: PROJECT_NAME + "-backend"
             }
         },
         spec: {
             replicas: 1,
             selector: {
                 matchLabels: {
-                    pod: PROJECT_NAME + "-server-container"
+                    pod: PROJECT_NAME + "-backend-container"
                 }
             },
             template: {
                 metadata: {
                     namespace: PROJECT_NAME + "-" + HOST_TYPE,
                     labels: {
-                        pod: PROJECT_NAME + "-server-container"
+                        pod: PROJECT_NAME + "-backend-container"
                     }
                 },
                 spec: __assign({ containers: [
                         {
-                            name: PROJECT_NAME + "-server",
+                            name: PROJECT_NAME + "-backend",
                             image: DOCKER_BACKEND_IMAGE,
                             imagePullPolicy: HOST_TYPE === "local" /* Local */ ? "Never" : "Always",
                             ports: [
@@ -175,11 +175,11 @@ var PROJECT_CONFIG = (_a = {},
         apiVersion: "v1",
         metadata: {
             namespace: PROJECT_NAME + "-" + HOST_TYPE,
-            name: PROJECT_NAME + "-static-service"
+            name: PROJECT_NAME + "-frontend-service"
         },
         spec: {
             selector: {
-                pod: PROJECT_NAME + "-static-container"
+                pod: PROJECT_NAME + "-frontend-container"
             },
             ports: [
                 {
@@ -196,11 +196,11 @@ var PROJECT_CONFIG = (_a = {},
         apiVersion: "v1",
         metadata: {
             namespace: PROJECT_NAME + "-" + HOST_TYPE,
-            name: PROJECT_NAME + "-server-service"
+            name: PROJECT_NAME + "-backend-service"
         },
         spec: {
             selector: {
-                pod: PROJECT_NAME + "-server-container"
+                pod: PROJECT_NAME + "-backend-container"
             },
             ports: [
                 {
@@ -243,7 +243,7 @@ var PROJECT_CONFIG = (_a = {},
         kind: "Ingress",
         metadata: {
             namespace: PROJECT_NAME + "-" + HOST_TYPE,
-            name: PROJECT_NAME + "-server-ingress",
+            name: PROJECT_NAME + "-backend-ingress",
             annotations: (_b = {},
                 _b["kubernetes.io/ingress.class"] = "nginx",
                 _b["cert-manager.io/cluster-issuer"] = "letsencrypt-" + HOST_TYPE,
@@ -252,8 +252,8 @@ var PROJECT_CONFIG = (_a = {},
                 _b["nginx.ingress.kubernetes.io/rewrite-target"] = "/api/$2",
                 _b["nginx.ingress.kubernetes.io/secure-backends"] = "true",
                 _b["nginx.ingress.kubernetes.io/ssl-redirect"] = "true",
-                _b["nginx.ingress.kubernetes.io/websocket-services"] = PROJECT_NAME + "-server-service",
-                _b["nginx.org/websocket-services"] = PROJECT_NAME + "-server-service",
+                _b["nginx.ingress.kubernetes.io/websocket-services"] = PROJECT_NAME + "-backend-service",
+                _b["nginx.org/websocket-services"] = PROJECT_NAME + "-backend-service",
                 _b)
         },
         spec: {
@@ -271,7 +271,7 @@ var PROJECT_CONFIG = (_a = {},
                             {
                                 path: PROJECT_BACKEND_INGRESS_PATH,
                                 backend: {
-                                    serviceName: PROJECT_NAME + "-server-service",
+                                    serviceName: PROJECT_NAME + "-backend-service",
                                     servicePort: 5000
                                 }
                             },
@@ -286,7 +286,7 @@ var PROJECT_CONFIG = (_a = {},
         kind: "Ingress",
         metadata: {
             namespace: PROJECT_NAME + "-" + HOST_TYPE,
-            name: PROJECT_NAME + "-static-ingress",
+            name: PROJECT_NAME + "-frontend-ingress",
             annotations: (_c = {},
                 _c["kubernetes.io/ingress.class"] = "nginx",
                 _c["cert-manager.io/cluster-issuer"] = "letsencrypt-" + HOST_TYPE,
@@ -312,7 +312,7 @@ var PROJECT_CONFIG = (_a = {},
                             {
                                 path: PROJECT_FRONTEND_INGRESS_PATH,
                                 backend: {
-                                    serviceName: PROJECT_NAME + "-static-service",
+                                    serviceName: PROJECT_NAME + "-frontend-service",
                                     servicePort: 9090
                                 }
                             },

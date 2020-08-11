@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  namespace: site15-local
+  name: site15-frontend-service
+spec:
+  selector:
+    pod: site15-frontend-container
+  ports:
+    - protocol: TCP
+      port: 9090
+      targetPort: 9090
+  type: ClusterIP

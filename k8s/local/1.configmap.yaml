@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: site15-local
+  name: site15-config
+data:
+  POSTGRES_URL: postgres://site15_admin:site15_password@postgres.postgres-local:5432/site15?schema=public

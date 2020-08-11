@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  site15-nginx-backend-with-frontend.conf:
+  site15-backend-with-frontend.conf:
     image: 'site15/backend-with-frontend:local'
     build:
       context: ../../
@@ -14,7 +14,7 @@ services:
       dockerfile: ./docker/__Dockerfile/Dockerfile.site15-backend
     user: $UID:$GID
 
-  site15-nginx-frontend:
+  site15-frontend:
     image: 'site15/frontend:local'
     build:
       context: ../../
