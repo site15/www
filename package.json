@@ -39,6 +39,7 @@
     "docker:prod-local:restart": "export $(cat ./env/local.env) && npm run docker:prod:restart",
     "k8s:generator:run": "node ./k8s/generators/generator.js",
     "k8s:generator:build": "tsc ./k8s/generators/generator.ts",
+    "k8s:generator:run-all-env": "npm run k8s:generator:build && npm run k8s:generator:run-local-env && npm run k8s:generator:run-prod-env",
     "k8s:generator:run-local-env": "export $(cat ./env/local.env) && node ./k8s/generators/generator.js",
     "k8s:generator:run-prod-env": "export $(cat ./env/prod.env) && node ./k8s/generators/generator.js",
     "k8s:local:apply": "export $(cat ./env/local.env) && ./k8s/apply.sh && npm run migrate",
