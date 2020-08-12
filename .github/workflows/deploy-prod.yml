@@ -128,7 +128,9 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
           script: |
-            /snap/bin/microk8s kubectl apply -f ./vps/site15.ru/k8s/prod/postgres/services
+            cd ./vps/site15.ru
+            export $(cat ./env/prod.env)
+            ./k8s/open-database.sh.sh
 
       - name: Apply migrations on host
         run: npm run migrate
@@ -145,7 +147,9 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
           script: |
-            /snap/bin/microk8s kubectl delete service site15-global-postgres -n postgres-prod
+            cd ./vps/site15.ru
+            export $(cat ./env/prod.env)
+            ./k8s/close-database.sh.sh
 
       - name: Apply to K8S if migrations changed
         uses: appleboy/ssh-action@master
