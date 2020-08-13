@@ -4,7 +4,8 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "prisma:generate": "prisma generate"
+    "prisma:generate": "prisma generate",
+    "generate": "npm run prisma:generate"
   },
   "dependencies": {
     "rxjs": "~6.6.2",

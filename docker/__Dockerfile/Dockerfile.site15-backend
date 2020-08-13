@@ -5,7 +5,7 @@ COPY ./apps/site15-backend/package.json ./
 COPY ./prisma/schema.prisma ./
 RUN npm config set package-lock false
 RUN npm i --only=production
-RUN npm run prisma:generate
+RUN npm run generate
 COPY ./dist/apps/site15-backend .
 EXPOSE 5000
 STOPSIGNAL SIGINT
