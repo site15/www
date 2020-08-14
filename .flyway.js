@@ -3,7 +3,7 @@ const cs = new ConnectionString(process.env.POSTGRES_URL);
 const {
   user: USERNAME,
   password: PASSWORD,
-  HOST = cs.hosts && cs.hosts[0].toString(),
+  HOST = cs.host,
   DATABASE = cs.path && cs.path[0],
   SCHEMA = cs.params && cs.params.schema,
   SCHEMAS = cs.params && cs.params.schemas
