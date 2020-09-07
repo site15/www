@@ -92,11 +92,11 @@ const PROJECT_CONFIG = {
               resources: {
                 requests: {
                   memory: `64Mi`,
-                  cpu: `250m`,
+                  cpu: `50m`,
                 },
                 limits: {
                   memory: `128Mi`,
-                  cpu: `500m`,
+                  cpu: `100m`,
                 },
               },
             },
@@ -104,12 +104,12 @@ const PROJECT_CONFIG = {
           ...(HOST_TYPE === HostType.Local
             ? {}
             : {
-                imagePullSecrets: [
-                  {
-                    name: `regcred`,
-                  },
-                ],
-              }),
+              imagePullSecrets: [
+                {
+                  name: `regcred`,
+                },
+              ],
+            }),
         },
       },
     },
@@ -161,11 +161,11 @@ const PROJECT_CONFIG = {
               resources: {
                 requests: {
                   memory: `64Mi`,
-                  cpu: `250m`,
+                  cpu: `75m`,
                 },
                 limits: {
                   memory: `128Mi`,
-                  cpu: `500m`,
+                  cpu: `150m`,
                 },
               },
             },
@@ -173,12 +173,12 @@ const PROJECT_CONFIG = {
           ...(HOST_TYPE === HostType.Local
             ? {}
             : {
-                imagePullSecrets: [
-                  {
-                    name: `regcred`,
-                  },
-                ],
-              }),
+              imagePullSecrets: [
+                {
+                  name: `regcred`,
+                },
+              ],
+            }),
         },
       },
     },
@@ -476,11 +476,11 @@ const DATABASE_CONFIG = {
               resources: {
                 requests: {
                   memory: `64Mi`,
-                  cpu: `250m`,
+                  cpu: `150m`,
                 },
                 limits: {
                   memory: `128Mi`,
-                  cpu: `500m`,
+                  cpu: `300m`,
                 },
               },
             },

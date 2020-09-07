@@ -58,7 +58,8 @@
     "prisma:generate": "prisma generate",
     "prisma:watch": "npm run prisma:generate && nodemon --watch prisma/schema.prisma -x \"npm run prisma:generate\"",
     "generate": "npm run prisma:generate",
-    "generate:local": "export $(cat ./env/local.env) && npm run generate"
+    "generate:local": "export $(cat ./env/local.env) && npm run generate",
+    "commit": "npx git-cz"
   },
   "private": true,
   "dependencies": {
