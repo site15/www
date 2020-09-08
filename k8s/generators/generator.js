@@ -86,11 +86,11 @@ var PROJECT_CONFIG = (_a = {},
                             resources: {
                                 requests: {
                                     memory: "64Mi",
-                                    cpu: "250m"
+                                    cpu: "50m"
                                 },
                                 limits: {
                                     memory: "128Mi",
-                                    cpu: "500m"
+                                    cpu: "100m"
                                 }
                             }
                         },
@@ -150,11 +150,11 @@ var PROJECT_CONFIG = (_a = {},
                             resources: {
                                 requests: {
                                     memory: "64Mi",
-                                    cpu: "250m"
+                                    cpu: "75m"
                                 },
                                 limits: {
                                     memory: "128Mi",
-                                    cpu: "500m"
+                                    cpu: "150m"
                                 }
                             }
                         },
@@ -462,11 +462,11 @@ var DATABASE_CONFIG = (_d = {},
                             resources: {
                                 requests: {
                                     memory: "64Mi",
-                                    cpu: "250m"
+                                    cpu: "150m"
                                 },
                                 limits: {
                                     memory: "128Mi",
-                                    cpu: "500m"
+                                    cpu: "300m"
                                 }
                             }
                         },

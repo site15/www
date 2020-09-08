@@ -97,6 +97,7 @@ jobs:
             export HOST=${{ secrets.HOST }}
             export POSTGRES_USER=${{ secrets.POSTGRES_USER }}
             export POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
+            export JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}
             ./k8s/apply.sh
 
   migrate-database:
@@ -164,4 +165,5 @@ jobs:
             export HOST=${{ secrets.HOST }}
             export POSTGRES_USER=${{ secrets.POSTGRES_USER }}
             export POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
+            export JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}
             ./k8s/apply.sh

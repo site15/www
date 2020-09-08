@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: site15-local
+  namespace: site15-prod
   name: site15-backend
   labels:
     app: site15-backend
@@ -12,14 +12,14 @@ spec:
       pod: site15-backend-container
   template:
     metadata:
-      namespace: site15-local
+      namespace: site15-prod
       labels:
         pod: site15-backend-container
     spec:
       containers:
         - name: site15-backend
-          image: site15/backend:local
-          imagePullPolicy: Never
+          image: site15/site15-backend:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 5000
           envFrom:
@@ -32,3 +32,5 @@ spec:
             limits:
               memory: 128Mi
               cpu: 150m
+      imagePullSecrets:
+        - name: regcred

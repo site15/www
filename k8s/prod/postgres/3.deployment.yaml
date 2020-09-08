@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: postgres-local
+  namespace: postgres-prod
   name: postgres
 spec:
   replicas: 1
@@ -10,7 +10,7 @@ spec:
       pod: postgres-container
   template:
     metadata:
-      namespace: postgres-local
+      namespace: postgres-prod
       labels:
         app: postgres
         pod: postgres-container
