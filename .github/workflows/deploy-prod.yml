@@ -113,6 +113,18 @@ jobs:
           # a pull request then we can checkout the head.
           fetch-depth: 2
 
+      - name: Cache node_modules
+        id: cache_node_modules
+        uses: actions/cache@v2
+        with:
+          path: |
+            **/node_modules
+          key: ${{ runner.os }}-${{ hashFiles('**/package.json') }}
+
+      - name: Install packages
+        run: npm install
+        if: ${{steps.cache_node_modules.outputs.cache-hit != 'true' }}
+        
       - name: Cache migrations
         id: cache_migrations
         uses: actions/cache@v2
