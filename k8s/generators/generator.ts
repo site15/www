@@ -337,7 +337,30 @@ const PROJECT_CONFIG = {
   },
 };
 
-const DATABASE_CONFIG = {  
+const DATABASE_CONFIG = {
+  [`./k8s/${HOST_TYPE}/postgres/services/global-service.yaml`]: <Service>{
+    apiVersion: `v1`,
+    kind: `Service`,
+    metadata: {
+      namespace: `postgres-${HOST_TYPE}`,
+      name: `${PROJECT_NAME}-global-postgres`,
+      labels: {
+        app: `postgres`,
+      },
+    },
+    spec: {
+      type: `NodePort`,
+      ports: [
+        {
+          port: POSTGRES_INTERNAL_PORT,
+          nodePort: POSTGRES_PORT,
+        },
+      ],
+      selector: {
+        app: `postgres`,
+      },
+    },
+  },
   [`./k8s/${HOST_TYPE}/postgres/0.namespace.yaml`]: <Namespace>{
     apiVersion: `v1`,
     kind: `Namespace`,

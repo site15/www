@@ -1,1 +1,1 @@
-/snap/bin/microk8s kubectl port-forward -n postgres-$HOST_TYPE deployment/postgres $POSTGRES_PORT:$POSTGRES_INTERNAL_PORT &
+/snap/bin/microk8s kubectl apply -f  ./k8s/$HOST_TYPE/postgres/services

@@ -324,6 +324,29 @@ var PROJECT_CONFIG = (_a = {},
     },
     _a);
 var DATABASE_CONFIG = (_d = {},
+    _d["./k8s/" + HOST_TYPE + "/postgres/services/global-service.yaml"] = {
+        apiVersion: "v1",
+        kind: "Service",
+        metadata: {
+            namespace: "postgres-" + HOST_TYPE,
+            name: PROJECT_NAME + "-global-postgres",
+            labels: {
+                app: "postgres"
+            }
+        },
+        spec: {
+            type: "NodePort",
+            ports: [
+                {
+                    port: POSTGRES_INTERNAL_PORT,
+                    nodePort: POSTGRES_PORT
+                },
+            ],
+            selector: {
+                app: "postgres"
+            }
+        }
+    },
     _d["./k8s/" + HOST_TYPE + "/postgres/0.namespace.yaml"] = {
         apiVersion: "v1",
         kind: "Namespace",
