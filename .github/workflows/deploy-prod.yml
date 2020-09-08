@@ -132,8 +132,8 @@ jobs:
           path: |
             **/migrations
           key: ${{ runner.os }}-${{ hashFiles('**/migrations/**/*', '**/.github/workflow/deploy-prod.yml') }}
-
-      - name: Open database in K8S for internet
+            
+      - name: Open database in K8S for ssh
         uses: appleboy/ssh-action@master
         if: ${{ github.event_name == 'push' && steps.cache_migrations.outputs.cache-hit != 'true' }}
         with:
@@ -145,14 +145,17 @@ jobs:
             export $(cat ./env/prod.env)
             ./k8s/open-database.sh
 
+      - name: Map database port over ssh-tunel
+        run: ssh -R ${{ secrets.POSTGRES_PORT }}:127.0.0.1:${{ secrets.POSTGRES_PORT }} ${{ secrets.HOST }}
+
       - name: Apply migrations on host
         run: npm run migrate
         if: ${{ github.event_name == 'push' && steps.cache_migrations.outputs.cache-hit != 'true' }}
         env:
-          POSTGRES_URL: postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@${{ secrets.HOST }}:${{ secrets.POSTGRES_PORT }}/site15?schema=public
+          POSTGRES_URL: postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@$127.0.0.1:${{ secrets.POSTGRES_PORT }}/site15?schema=public
           REDIS_URL: redis://${{ secrets.HOST }}:32379
 
-      - name: Close database in K8S for internet
+      - name: Close database in K8S for ssh
         uses: appleboy/ssh-action@master
         if: ${{ github.event_name == 'push' && steps.cache_migrations.outputs.cache-hit != 'true' }}
         with:

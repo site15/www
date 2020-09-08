@@ -43,7 +43,7 @@
     "k8s:generator:run-local-env": "export $(cat ./env/local.env) && node ./k8s/generators/generator.js",
     "k8s:generator:run-prod-env": "export $(cat ./env/prod.env) && node ./k8s/generators/generator.js",
     "k8s:local:apply": "export $(cat ./env/local.env) && ./k8s/apply.sh && npm run migrate",
-    "k8s:local:build-apply": "export $(cat ./env/local.env) && npm run build:local && npm run k8s:generator:build && ./k8s/build-apply.sh && ./k8s/open-database.sh && npm run migrate",
+    "k8s:local:build-apply": "export $(cat ./env/local.env) && npm run build:local && npm run k8s:generator:build && ./k8s/build-apply.sh && ./k8s/open-database.sh && npm run migrate && ./k8s/close-database.sh",
     "k8s:local:dashboard": "/snap/bin/microk8s dashboard-proxy",
     "k8s:prod:apply": "export $(cat ./env/prod.env) && ./k8s/apply.sh && npm run migrate",
     "build:local:site15-frontend": "ng build site15-frontend --base-href /site15/ --configuration=local",

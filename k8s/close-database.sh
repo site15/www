@@ -1,1 +1,1 @@
-/snap/bin/microk8s kubectl delete service $PROJECT_NAME-global-postgres -n postgres-$HOST_TYPE
+kill -9 $(sudo lsof -t -i:$POSTGRES_PORT)
