@@ -33,4 +33,4 @@ spec:
               memory: 128Mi
               cpu: 150m
       imagePullSecrets:
-        - name: regcred
+        - name: docker-hub-regcred

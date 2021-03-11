@@ -106,7 +106,7 @@ const PROJECT_CONFIG = {
             : {
               imagePullSecrets: [
                 {
-                  name: `regcred`,
+                  name: `docker-hub-regcred`,
                 },
               ],
             }),
@@ -175,7 +175,7 @@ const PROJECT_CONFIG = {
             : {
               imagePullSecrets: [
                 {
-                  name: `regcred`,
+                  name: `docker-hub-regcred`,
                 },
               ],
             }),

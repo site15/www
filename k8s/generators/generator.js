@@ -99,7 +99,7 @@ var PROJECT_CONFIG = (_a = {},
                     : {
                         imagePullSecrets: [
                             {
-                                name: "regcred"
+                                name: "docker-hub-regcred"
                             },
                         ]
                     }))
@@ -163,7 +163,7 @@ var PROJECT_CONFIG = (_a = {},
                     : {
                         imagePullSecrets: [
                             {
-                                name: "regcred"
+                                name: "docker-hub-regcred"
                             },
                         ]
                     }))
