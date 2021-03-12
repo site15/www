@@ -342,7 +342,7 @@ const DATABASE_CONFIG = {
     apiVersion: `v1`,
     kind: `Service`,
     metadata: {
-      namespace: `postgres-${HOST_TYPE}`,
+      namespace: `global-postgres-${HOST_TYPE}`,
       name: `${PROJECT_NAME}-global-postgres`,
       labels: {
         app: `postgres`,
@@ -365,14 +365,14 @@ const DATABASE_CONFIG = {
     apiVersion: `v1`,
     kind: `Namespace`,
     metadata: {
-      name: `postgres-${HOST_TYPE}`,
+      name: `global-postgres-${HOST_TYPE}`,
     },
   },
   [`./k8s/${HOST_TYPE}/postgres/1.configmap.yaml`]: <ConfigMap>{
     apiVersion: `v1`,
     kind: `ConfigMap`,
     metadata: {
-      namespace: `postgres-${HOST_TYPE}`,
+      namespace: `global-postgres-${HOST_TYPE}`,
       name: `postgres-config`,
       labels: {
         app: `postgres`,
@@ -388,8 +388,8 @@ const DATABASE_CONFIG = {
       kind: `PersistentVolume`,
       apiVersion: `v1`,
       metadata: {
-        namespace: `postgres-${HOST_TYPE}`,
-        name: `postgres-pv-volume`,
+        namespace: `global-postgres-${HOST_TYPE}`,
+        name: `global-postgres-pv-volume`,
         labels: {
           type: `local`,
           app: `postgres`,
@@ -410,8 +410,8 @@ const DATABASE_CONFIG = {
       kind: `PersistentVolumeClaim`,
       apiVersion: `v1`,
       metadata: {
-        namespace: `postgres-${HOST_TYPE}`,
-        name: `postgres-pv-claim`,
+        namespace: `global-postgres-${HOST_TYPE}`,
+        name: `global-postgres-pv-claim`,
         labels: {
           app: `postgres`,
         },
@@ -431,7 +431,7 @@ const DATABASE_CONFIG = {
     apiVersion: `apps/v1`,
     kind: `Deployment`,
     metadata: {
-      namespace: `postgres-${HOST_TYPE}`,
+      namespace: `global-postgres-${HOST_TYPE}`,
       name: `postgres`,
     },
     spec: {
@@ -443,7 +443,7 @@ const DATABASE_CONFIG = {
       },
       template: {
         metadata: {
-          namespace: `postgres-${HOST_TYPE}`,
+          namespace: `global-postgres-${HOST_TYPE}`,
           labels: {
             app: `postgres`,
             pod: `postgres-container`,
@@ -479,7 +479,7 @@ const DATABASE_CONFIG = {
                   cpu: `200m`,
                 },
                 limits: {
-                  memory: `700Mi`,
+                  memory: `1000Mi`,
                   cpu: `1`,
                 },
               },
@@ -489,7 +489,7 @@ const DATABASE_CONFIG = {
             {
               name: `postgredb`,
               persistentVolumeClaim: {
-                claimName: `postgres-pv-claim`,
+                claimName: `global-postgres-pv-claim`,
               },
             },
           ],
@@ -501,7 +501,7 @@ const DATABASE_CONFIG = {
     apiVersion: `v1`,
     kind: `Service`,
     metadata: {
-      namespace: `postgres-${HOST_TYPE}`,
+      namespace: `global-postgres-${HOST_TYPE}`,
       name: `postgres`,
       labels: {
         app: `postgres`,

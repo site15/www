@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: postgres-prod
+  namespace: global-postgres-prod
   name: postgres
 spec:
   replicas: 1
@@ -10,7 +10,7 @@ spec:
       pod: postgres-container
   template:
     metadata:
-      namespace: postgres-prod
+      namespace: global-postgres-prod
       labels:
         app: postgres
         pod: postgres-container
@@ -32,9 +32,9 @@ spec:
               memory: 100Mi
               cpu: 200m
             limits:
-              memory: 700Mi
+              memory: 1000Mi
               cpu: "1"
       volumes:
         - name: postgredb
           persistentVolumeClaim:
-            claimName: postgres-pv-claim
+            claimName: global-postgres-pv-claim
