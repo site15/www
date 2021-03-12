@@ -49,7 +49,7 @@ services:
       - site15-redis
 
   site15-postgres:
-    image: "postgres:12"
+    image: "postgres:13"
     container_name: "site15-postgres"
     environment:
       - POSTGRES_USER=${POSTGRES_USER}

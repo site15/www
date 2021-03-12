@@ -439,7 +439,7 @@ var DATABASE_CONFIG = (_d = {},
                     containers: [
                         {
                             name: "postgres",
-                            image: "postgres:12",
+                            image: "postgres:13",
                             imagePullPolicy: "IfNotPresent",
                             ports: [
                                 {
