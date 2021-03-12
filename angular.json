@@ -21,7 +21,10 @@
             "polyfills": "apps/site15-frontend/src/polyfills.ts",
             "tsConfig": "apps/site15-frontend/tsconfig.app.json",
             "aot": true,
-            "assets": ["apps/site15-frontend/src/favicon.ico", "apps/site15-frontend/src/assets"],
+            "assets": [
+              "apps/site15-frontend/src/favicon.ico",
+              "apps/site15-frontend/src/assets"
+            ],
             "styles": ["apps/site15-frontend/src/styles.scss"],
             "scripts": []
           },

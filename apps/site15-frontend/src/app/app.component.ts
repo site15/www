@@ -11,5 +11,5 @@ import { environment } from '../environments/environment';
 export class AppComponent {
   hello$ = this.http.get<Message>(`${environment.api}/hello`);
   db$ = this.http.get<Message>(`${environment.api}/db`);
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 }

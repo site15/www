@@ -98,18 +98,21 @@ Teams using Nx gain the advantage of building full-stack applications with their
 Visit [Nx Cloud](https://nx.app/) to learn more.
 
 # Run with docker-compose in development mode
+
 ```bash
 npm run docker:dev:up
 # open http://localhost:9090/
 ```
 
 # Run with docker-compose in production
+
 ```bash
 npm run docker:prod:up
 # open http://localhost:9090/
 ```
 
 # Run with docker-compose as production in local
+
 ```bash
 npm run docker:prod-local:up
 # open http://localhost:9090/
@@ -153,6 +156,7 @@ npm run k8s:local:build-apply
 ```
 
 # Utils
+
 ```
 microk8s kubectl get pods --all-namespaces -l app.kubernetes.io/name=ingress-nginx
 microk8s kubectl get all --all-namespaces
