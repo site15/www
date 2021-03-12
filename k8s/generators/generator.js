@@ -388,7 +388,7 @@ var DATABASE_CONFIG = (_d = {},
                 },
                 accessModes: ["ReadWriteMany"],
                 hostPath: {
-                    path: "/mnt/data"
+                    path: "/mnt/global-postgres-data"
                 }
             }
         },

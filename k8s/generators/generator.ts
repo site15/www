@@ -402,7 +402,7 @@ const DATABASE_CONFIG = {
         },
         accessModes: [`ReadWriteMany`],
         hostPath: {
-          path: `/mnt/data`,
+          path: `/mnt/global-postgres-data`,
         },
       },
     },
