@@ -398,7 +398,7 @@ const DATABASE_CONFIG = {
       spec: {
         storageClassName: `manual`,
         capacity: {
-          storage: `5Gi`,
+          storage: `20Gi`,
         },
         accessModes: [`ReadWriteMany`],
         hostPath: {
@@ -421,7 +421,7 @@ const DATABASE_CONFIG = {
         accessModes: [`ReadWriteMany`],
         resources: {
           requests: {
-            storage: `5Gi`,
+            storage: `20Gi`,
           },
         },
       },

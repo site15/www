@@ -384,7 +384,7 @@ var DATABASE_CONFIG = (_d = {},
             spec: {
                 storageClassName: "manual",
                 capacity: {
-                    storage: "5Gi"
+                    storage: "20Gi"
                 },
                 accessModes: ["ReadWriteMany"],
                 hostPath: {
@@ -407,7 +407,7 @@ var DATABASE_CONFIG = (_d = {},
                 accessModes: ["ReadWriteMany"],
                 resources: {
                     requests: {
-                        storage: "5Gi"
+                        storage: "20Gi"
                     }
                 }
             }
