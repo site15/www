@@ -1,4 +1,4 @@
-# Site15
+# Site15: example
 
 This project was generated using [Nx](https://nx.dev).
 
