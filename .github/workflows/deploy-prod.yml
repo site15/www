@@ -124,18 +124,9 @@ jobs:
       - name: Install packages
         run: npm install
         if: ${{steps.cache_node_modules.outputs.cache-hit != 'true' }}
-        
-      - name: Cache migrations
-        id: cache_migrations
-        uses: actions/cache@v2
-        with:
-          path: |
-            **/migrations
-          key: ${{ runner.os }}-${{ hashFiles('**/migrations/**/*', '**/.github/workflow/deploy-prod.yml') }}
 
       - name: Open database in K8S for internet
         uses: appleboy/ssh-action@master
-        if: ${{ github.event_name == 'push' && steps.cache_migrations.outputs.cache-hit != 'true' }}
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
