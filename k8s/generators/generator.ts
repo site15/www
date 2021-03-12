@@ -50,7 +50,7 @@ const PROJECT_CONFIG = {
       name: `${PROJECT_NAME}-config`,
     },
     data: {
-      POSTGRES_URL: `postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres.postgres-${process.env.HOST_TYPE}:${POSTGRES_INTERNAL_PORT}/${POSTGRES_DATABASE}?schema=public`,
+      POSTGRES_URL: `postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres.global-postgres-${process.env.HOST_TYPE}:${POSTGRES_INTERNAL_PORT}/${POSTGRES_DATABASE}?schema=public`,
     },
   },
   [`./k8s/${HOST_TYPE}/2.frontend-deployment.yaml`]: <Deployment>{

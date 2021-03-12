@@ -4,4 +4,4 @@ metadata:
   namespace: site15-prod
   name: site15-config
 data:
-  POSTGRES_URL: postgres://site15_admin:site15_password@postgres.postgres-prod:5432/site15?schema=public
+  POSTGRES_URL: postgres://site15_admin:site15_password@postgres.global-postgres-prod:5432/site15?schema=public
