@@ -104,12 +104,12 @@ const PROJECT_CONFIG = {
           ...(HOST_TYPE === HostType.Local
             ? {}
             : {
-              imagePullSecrets: [
-                {
-                  name: `docker-hub-regcred`,
-                },
-              ],
-            }),
+                imagePullSecrets: [
+                  {
+                    name: `docker-hub-regcred`,
+                  },
+                ],
+              }),
         },
       },
     },
@@ -173,12 +173,12 @@ const PROJECT_CONFIG = {
           ...(HOST_TYPE === HostType.Local
             ? {}
             : {
-              imagePullSecrets: [
-                {
-                  name: `docker-hub-regcred`,
-                },
-              ],
-            }),
+                imagePullSecrets: [
+                  {
+                    name: `docker-hub-regcred`,
+                  },
+                ],
+              }),
         },
       },
     },
@@ -475,12 +475,12 @@ const DATABASE_CONFIG = {
               ],
               resources: {
                 requests: {
-                  memory: `64Mi`,
-                  cpu: `150m`,
+                  memory: `100Mi`,
+                  cpu: `200m`,
                 },
                 limits: {
-                  memory: `128Mi`,
-                  cpu: `300m`,
+                  memory: `700Mi`,
+                  cpu: `1`,
                 },
               },
             },
