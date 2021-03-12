@@ -27,31 +27,44 @@ jobs:
 
       - name: Install packages
         run: npm install
-        if: ${{steps.cache_node_modules.outputs.cache-hit != 'true' }}        
+        if: ${{steps.cache_node_modules.outputs.cache-hit != 'true' }}
 
-      - name: Run build server
-        run: npm run build:prod
+      - name: Run build code
+        run: |
+          npm run k8s:generator:build
+          npm run build:prod
 
-      - name: Build and push Docker images (static)
+      - name: Run generate K8S files
+        run: |
+          export $(cat ./env/prod.env)
+          export HOST=${{ secrets.HOST }}
+          export ROOT_POSTGRES_USER=${{ secrets.ROOT_POSTGRES_USER }}
+          export ROOT_POSTGRES_PASSWORD=${{ secrets.ROOT_POSTGRES_PASSWORD }}
+          export POSTGRES_USER=${{ secrets.POSTGRES_USER }}
+          export POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
+          export POSTGRES_PORT=${{ secrets.POSTGRES_PORT }}
+          node ./k8s/generators/generator.js
+
+      - name: Build and push Docker images (frontend)
         uses: docker/build-push-action@v1
         if: ${{ github.event_name == 'push' }}
         with:
-          dockerfile: docker/__Dockerfile/Dockerfile.site15-static
+          dockerfile: docker/__Dockerfile/Dockerfile.site15-frontend
           username: endykaufman
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
           registry: docker.io
-          repository: site15/site15-ru-static
+          repository: site15/site15-frontend
           tags: latest
 
-      - name: Build and push Docker images (server)
+      - name: Build and push Docker images (backend)
         uses: docker/build-push-action@v1
         if: ${{ github.event_name == 'push' }}
         with:
-          dockerfile: docker/__Dockerfile/Dockerfile.site15-server
+          dockerfile: docker/__Dockerfile/Dockerfile.site15-backend
           username: endykaufman
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
           registry: docker.io
-          repository: site15/site15-ru-server
+          repository: site15/site15-backend
           tags: latest
 
       - name: Copy K8S files to host
@@ -61,7 +74,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
-          source: "k8s"
+          source: "k8s,env"
           target: "vps/site15.ru"
           rm: true
 
@@ -93,12 +106,9 @@ jobs:
             cd ./vps/site15.ru
             export $(cat ./env/prod.env)
             export HOST=${{ secrets.HOST }}
-            export ROOT_POSTGRES_USER=${{ secrets.ROOT_POSTGRES_USER }}
-            export ROOT_POSTGRES_PASSWORD=${{ secrets.ROOT_POSTGRES_PASSWORD }}
             export POSTGRES_USER=${{ secrets.POSTGRES_USER }}
             export POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
-            export POSTGRES_PORT=${{ secrets.POSTGRES_PORT }}
-            node ./k8s/generators/generator.js
+            export JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}
             ./k8s/apply.sh
 
   migrate-database:
@@ -113,24 +123,29 @@ jobs:
           # We must fetch at least the immediate parents so that if this is
           # a pull request then we can checkout the head.
           fetch-depth: 2
-          
-      - name: Cache migrations
-        id: cache_migrations
+
+      - name: Cache node_modules
+        id: cache_node_modules
         uses: actions/cache@v2
         with:
           path: |
-            **/migrations
-          key: ${{ runner.os }}-${{ hashFiles('**/migrations/**/*', '**/.github/workflow/deploy-prod.yml') }}
+            **/node_modules
+          key: ${{ runner.os }}-${{ hashFiles('**/package.json') }}
+
+      - name: Install packages
+        run: npm install
+        if: ${{steps.cache_node_modules.outputs.cache-hit != 'true' }}
 
       - name: Open database in K8S for internet
         uses: appleboy/ssh-action@master
-        if: ${{ github.event_name == 'push' && steps.cache_migrations.outputs.cache-hit != 'true' }}
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
           script: |
-            /snap/bin/microk8s kubectl apply -f ./vps/site15.ru/k8s/prod/postgres/services
+            cd ./vps/site15.ru
+            export $(cat ./env/prod.env)
+            ./k8s/open-database.sh
 
       - name: Apply migrations on host
         run: npm run migrate
@@ -147,7 +162,9 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
           script: |
-            /snap/bin/microk8s kubectl delete service site15-global-postgres -n postgres-prod
+            cd ./vps/site15.ru
+            export $(cat ./env/prod.env)
+            ./k8s/close-database.sh
 
       - name: Apply to K8S if migrations changed
         uses: appleboy/ssh-action@master
@@ -157,11 +174,10 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
           script: |
-            export HOST_TYPE=prod
-            export ROOT_POSTGRES_USER=${{ secrets.ROOT_POSTGRES_USER }}
-            export ROOT_POSTGRES_PASSWORD=${{ secrets.ROOT_POSTGRES_PASSWORD }}
+            cd ./vps/site15.ru
+            export $(cat ./env/prod.env)
+            export HOST=${{ secrets.HOST }}
             export POSTGRES_USER=${{ secrets.POSTGRES_USER }}
             export POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
-            export POSTGRES_PORT=${{ secrets.POSTGRES_PORT }}
-            cd ./vps/site15.ru
+            export JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}
             ./k8s/apply.sh

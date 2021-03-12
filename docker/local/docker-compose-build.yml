@@ -1,21 +1,21 @@
 version: '3'
 
 services:
-  site15-nginx-server-with-static:
-    image: 'site15/server-with-static:local'
+  site15-backend-with-frontend.conf:
+    image: 'site15/backend-with-frontend:local'
     build:
       context: ../../
-      dockerfile: ./docker/__Dockerfile/Dockerfile.site15-server-with-static
+      dockerfile: ./docker/__Dockerfile/Dockerfile.site15-backend-with-frontend
 
-  site15-server:
-    image: 'site15/server:local'
+  site15-backend:
+    image: 'site15/backend:local'
     build:
       context: ../../
-      dockerfile: ./docker/__Dockerfile/Dockerfile.site15-server
+      dockerfile: ./docker/__Dockerfile/Dockerfile.site15-backend
     user: $UID:$GID
 
-  site15-nginx-static:
-    image: 'site15/static:local'
+  site15-frontend:
+    image: 'site15/frontend:local'
     build:
       context: ../../
-      dockerfile: ./docker/__Dockerfile/Dockerfile.site15-static
+      dockerfile: ./docker/__Dockerfile/Dockerfile.site15-frontend

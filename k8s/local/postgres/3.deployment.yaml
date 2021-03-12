@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: postgres-local
+  namespace: global-postgres-local
   name: postgres
 spec:
   replicas: 1
@@ -10,14 +10,14 @@ spec:
       pod: postgres-container
   template:
     metadata:
-      namespace: postgres-local
+      namespace: global-postgres-local
       labels:
         app: postgres
         pod: postgres-container
     spec:
       containers:
         - name: postgres
-          image: postgres:12
+          image: postgres:13
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5432
@@ -29,12 +29,12 @@ spec:
               name: postgredb
           resources:
             requests:
-              memory: 64Mi
-              cpu: 250m
+              memory: 100Mi
+              cpu: 200m
             limits:
-              memory: 128Mi
-              cpu: 500m
+              memory: 1000Mi
+              cpu: "1"
       volumes:
         - name: postgredb
           persistentVolumeClaim:
-            claimName: postgres-pv-claim
+            claimName: global-postgres-pv-claim

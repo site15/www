@@ -1,25 +1,25 @@
 kind: PersistentVolume
 apiVersion: v1
 metadata:
-  namespace: postgres-prod
-  name: postgres-pv-volume
+  namespace: global-postgres-prod
+  name: global-postgres-pv-volume
   labels:
     type: local
     app: postgres
 spec:
   storageClassName: manual
   capacity:
-    storage: 5Gi
+    storage: 20Gi
   accessModes:
     - ReadWriteMany
   hostPath:
-    path: /mnt/data
+    path: /mnt/global-postgres-data
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  namespace: postgres-prod
-  name: postgres-pv-claim
+  namespace: global-postgres-prod
+  name: global-postgres-pv-claim
   labels:
     app: postgres
 spec:
@@ -28,4 +28,4 @@ spec:
     - ReadWriteMany
   resources:
     requests:
-      storage: 5Gi
+      storage: 20Gi

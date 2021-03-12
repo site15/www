@@ -3,12 +3,12 @@ const cs = new ConnectionString(process.env.POSTGRES_URL);
 const {
   user: USERNAME,
   password: PASSWORD,
-  HOST = cs.hosts && cs.hosts[0].toString(),
+  HOST = cs.host,
   DATABASE = cs.path && cs.path[0],
   SCHEMA = cs.params && cs.params.schema,
-  SCHEMAS = cs.params && cs.params.schemas
+  SCHEMAS = cs.params && cs.params.schemas,
 } = cs;
-      
+
 module.exports = {
   flywayArgs: {
     url: `jdbc:postgresql://${HOST}/${DATABASE}`,
@@ -24,7 +24,7 @@ module.exports = {
   env: {
     JAVA_ARGS: '-Djava.util.logging.config.file=./conf/logging.properties',
   },
-  version: '6.1.4', // optional, empty or missing will download the latest
+  version: '6.3.2', // optional, empty or missing will download the latest
   mavinPlugins: [
     {
       // optional, use to add any plugins (ie. logging)

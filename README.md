@@ -1,4 +1,4 @@
-# Site15
+# Site15: example
 
 This project was generated using [Nx](https://nx.dev).
 
@@ -98,14 +98,23 @@ Teams using Nx gain the advantage of building full-stack applications with their
 Visit [Nx Cloud](https://nx.app/) to learn more.
 
 # Run with docker-compose in development mode
+
 ```bash
 npm run docker:dev:up
 # open http://localhost:9090/
 ```
 
-# Run with docker-compose
+# Run with docker-compose in production
+
 ```bash
 npm run docker:prod:up
+# open http://localhost:9090/
+```
+
+# Run with docker-compose as production in local
+
+```bash
+npm run docker:prod-local:up
 # open http://localhost:9090/
 ```
 
@@ -143,10 +152,11 @@ microk8s kubectl get pods --namespace cert-manager
 # cert-manager-85db5c4c87-n9lwb              1/1     Running   3          7d9h
 # cert-manager-cainjector-7959549c78-lkg69   1/1     Running   3          7d9h
 # cert-manager-webhook-5c8696f555-b7bzr      1/1     Running   3          7d9h
-npm run k8s:local:apply
+npm run k8s:local:build-apply
 ```
 
 # Utils
+
 ```
 microk8s kubectl get pods --all-namespaces -l app.kubernetes.io/name=ingress-nginx
 microk8s kubectl get all --all-namespaces
