@@ -1,12 +1,14 @@
 import { Controller, Get } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client';
 import { Message } from '@site15/common';
 import { AppService } from './app.service';
+import { PrismaService } from './prisma.service';
 
 @Controller()
 export class AppController {
-  private prisma = new PrismaClient();
-  constructor(private readonly appService: AppService) {}
+  constructor(
+    private readonly appService: AppService,
+    private readonly prismaService: PrismaService
+  ) {}
 
   @Get('hello')
   getData(): Message {
@@ -15,7 +17,7 @@ export class AppController {
 
   @Get('db')
   getDbData() {
-    return this.prisma.projectType.findMany({
+    return this.prismaService.projectType.findMany({
       select: { id: true, name: true },
     });
   }

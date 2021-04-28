@@ -254,7 +254,7 @@ const PROJECT_CONFIG = {
       },
     },
   },
-  [`./k8s/${HOST_TYPE}/7.backend-ingress.yaml`]:{
+  [`./k8s/${HOST_TYPE}/7.backend-ingress.yaml`]: {
     apiVersion: `networking.k8s.io/v1`,
     kind: `Ingress`,
     metadata: {
@@ -288,7 +288,10 @@ const PROJECT_CONFIG = {
                 path: PROJECT_BACKEND_INGRESS_PATH,
                 pathType: 'ImplementationSpecific',
                 backend: {
-                    service: { name: `${PROJECT_NAME}-backend-service`, port: { number: 5000 } },
+                  service: {
+                    name: `${PROJECT_NAME}-backend-service`,
+                    port: { number: 5000 },
+                  },
                 },
               },
             ],
@@ -297,7 +300,7 @@ const PROJECT_CONFIG = {
       ],
     },
   },
-  [`./k8s/${HOST_TYPE}/8.frontend-ingress.yaml`]:{
+  [`./k8s/${HOST_TYPE}/8.frontend-ingress.yaml`]: {
     apiVersion: `networking.k8s.io/v1`,
     kind: `Ingress`,
     metadata: {
@@ -329,7 +332,10 @@ const PROJECT_CONFIG = {
                 path: PROJECT_FRONTEND_INGRESS_PATH,
                 pathType: 'ImplementationSpecific',
                 backend: {
-                    service: { name: `${PROJECT_NAME}-frontend-service`, port: { number: 9090 } },
+                  service: {
+                    name: `${PROJECT_NAME}-frontend-service`,
+                    port: { number: 9090 },
+                  },
                 },
               },
             ],
