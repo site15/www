@@ -75,16 +75,6 @@ jobs:
           target: "vps/site15.ru"
           rm: true
 
-      - name: Copy env files to host
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.KEY }}
-          source: "env"
-          target: "vps/site15.ru"
-          rm: true
-
   apply-k8s-changes:
     name: Apply changes
     needs: [delivery-to-host]
