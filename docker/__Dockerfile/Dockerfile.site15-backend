@@ -1,4 +1,4 @@
-FROM node:alpine
+FROM node:14-alpine
 LABEL maintainer="admin@site15.ru"
 WORKDIR /usr/src/app
 COPY ./apps/site15-backend/package.json ./

@@ -27,7 +27,7 @@ services:
       - site15-backend
 
   site15-frontend:
-    image: node:12
+    image: node:14-alpine
     user: $UID:$GID
     container_name: "site15-frontend-service"
     env_file:
@@ -47,7 +47,7 @@ services:
       - site15-backend
 
   site15-backend:
-    image: node:12
+    image: node:14-alpine
     user: $UID:$GID
     container_name: "site15-backend-service"
     env_file:
