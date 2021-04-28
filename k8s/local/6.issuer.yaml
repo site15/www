@@ -1,11 +1,11 @@
 apiVersion: cert-manager.io/v1alpha2
 kind: ClusterIssuer
 metadata:
-  namespace: site15-local
   name: letsencrypt-local
+  namespace: cert-manager
 spec:
   acme:
-    server: https://acme-v02.api.letsencrypt.org/directory
+    server: https://acme-staging-v02.api.letsencrypt.org/directory
     email: your_email_address_here
     privateKeySecretRef:
       name: letsencrypt-local

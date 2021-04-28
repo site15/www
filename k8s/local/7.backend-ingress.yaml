@@ -1,10 +1,10 @@
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   namespace: site15-local
   name: site15-backend-ingress
   annotations:
-    kubernetes.io/ingress.class: nginx
+    kubernetes.io/ingress.class: public
     cert-manager.io/cluster-issuer: letsencrypt-local
     nginx.ingress.kubernetes.io/proxy-read-timeout: "1800"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "1800"
@@ -23,6 +23,9 @@ spec:
       http:
         paths:
           - path: /site15/api(/|$)(.*)
+            pathType: ImplementationSpecific
             backend:
-              serviceName: site15-backend-service
-              servicePort: 5000
+              service:
+                name: site15-backend-service
+                port:
+                  number: 5000
