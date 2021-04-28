@@ -47,7 +47,6 @@ jobs:
 
       - name: Build and push Docker images (frontend)
         uses: docker/build-push-action@v1
-        if: ${{ github.event_name == 'push' }}
         with:
           dockerfile: docker/__Dockerfile/Dockerfile.site15-frontend
           username: endykaufman
@@ -58,7 +57,6 @@ jobs:
 
       - name: Build and push Docker images (backend)
         uses: docker/build-push-action@v1
-        if: ${{ github.event_name == 'push' }}
         with:
           dockerfile: docker/__Dockerfile/Dockerfile.site15-backend
           username: endykaufman
@@ -69,7 +67,6 @@ jobs:
 
       - name: Copy K8S files to host
         uses: appleboy/scp-action@master
-        if: ${{ github.event_name == 'push' }}
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
@@ -80,7 +77,6 @@ jobs:
 
       - name: Copy env files to host
         uses: appleboy/scp-action@master
-        if: ${{ github.event_name == 'push' }}
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
@@ -97,7 +93,6 @@ jobs:
     steps:
       - name: Apply to K8S
         uses: appleboy/ssh-action@master
-        if: ${{ github.event_name == 'push' }}
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
@@ -149,14 +144,12 @@ jobs:
 
       - name: Apply migrations on host
         run: npm run migrate
-        if: ${{ github.event_name == 'push' && steps.cache_migrations.outputs.cache-hit != 'true' }}
         env:
           POSTGRES_URL: postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@${{ secrets.HOST }}:${{ secrets.POSTGRES_PORT }}/site15?schema=public
           REDIS_URL: redis://${{ secrets.HOST }}:32379
 
       - name: Close database in K8S for internet
         uses: appleboy/ssh-action@master
-        if: ${{ github.event_name == 'push' && steps.cache_migrations.outputs.cache-hit != 'true' }}
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
@@ -168,7 +161,6 @@ jobs:
 
       - name: Apply to K8S if migrations changed
         uses: appleboy/ssh-action@master
-        if: ${{ github.event_name == 'push' && steps.cache_migrations.outputs.cache-hit != 'true'}}
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
