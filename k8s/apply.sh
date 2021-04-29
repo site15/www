@@ -10,5 +10,5 @@ POD=$(/snap/bin/microk8s kubectl get pod -l app=postgres -n global-postgres-$HOS
 /snap/bin/microk8s kubectl exec -n global-postgres-$HOST_TYPE -ti $POD -- psql -U postgres -d "$POSTGRES_DATABASE" -c "ALTER USER $POSTGRES_USER WITH LOGIN CREATEROLE NOCREATEDB NOSUPERUSER INHERIT"
 # /snap/bin/microk8s kubectl delete deployment $PROJECT_NAME-frontend -n $PROJECT_NAME-$HOST_TYPE --now
 # /snap/bin/microk8s kubectl delete deployment $PROJECT_NAME-backend -n $PROJECT_NAME-$HOST_TYPE --now
-/snap/bin/microk8s kubectl delete namespace $PROJECT_NAME'-'$HOST_TYPE
+# /snap/bin/microk8s kubectl delete namespace $PROJECT_NAME'-'$HOST_TYPE
 /snap/bin/microk8s kubectl apply -f ./k8s/$HOST_TYPE
