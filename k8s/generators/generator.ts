@@ -254,14 +254,14 @@ const PROJECT_CONFIG = {
       },
     },
   },
-  [`./k8s/${HOST_TYPE}/7.backend-ingress.yaml`]: {
-    apiVersion: `networking.k8s.io/v1`,
+  [`./k8s/${HOST_TYPE}/7.backend-ingress.yaml`]: <Ingress>{
+    apiVersion: `networking.k8s.io/v1beta1`,
     kind: `Ingress`,
     metadata: {
       namespace: `${PROJECT_NAME}-${HOST_TYPE}`,
       name: `${PROJECT_NAME}-backend-ingress`,
       annotations: {
-        [`kubernetes.io/ingress.class`]: `public`,
+        [`kubernetes.io/ingress.class`]: `nginx`,
         [`cert-manager.io/cluster-issuer`]: `letsencrypt-${HOST_TYPE}`,
         [`nginx.ingress.kubernetes.io/proxy-read-timeout`]: `1800`,
         [`nginx.ingress.kubernetes.io/proxy-send-timeout`]: `1800`,
@@ -286,12 +286,9 @@ const PROJECT_CONFIG = {
             paths: [
               {
                 path: PROJECT_BACKEND_INGRESS_PATH,
-                pathType: 'ImplementationSpecific',
                 backend: {
-                  service: {
-                    name: `${PROJECT_NAME}-backend-service`,
-                    port: { number: 5000 },
-                  },
+                  serviceName: `${PROJECT_NAME}-backend-service`,
+                  servicePort: 5000,
                 },
               },
             ],
@@ -300,14 +297,14 @@ const PROJECT_CONFIG = {
       ],
     },
   },
-  [`./k8s/${HOST_TYPE}/8.frontend-ingress.yaml`]: {
-    apiVersion: `networking.k8s.io/v1`,
+  [`./k8s/${HOST_TYPE}/8.frontend-ingress.yaml`]: <Ingress>{
+    apiVersion: `networking.k8s.io/v1beta1`,
     kind: `Ingress`,
     metadata: {
       namespace: `${PROJECT_NAME}-${HOST_TYPE}`,
       name: `${PROJECT_NAME}-frontend-ingress`,
       annotations: {
-        [`kubernetes.io/ingress.class`]: `public`,
+        [`kubernetes.io/ingress.class`]: `nginx`,
         [`cert-manager.io/cluster-issuer`]: `letsencrypt-${HOST_TYPE}`,
         [`nginx.ingress.kubernetes.io/proxy-read-timeout`]: `1800`,
         [`nginx.ingress.kubernetes.io/proxy-send-timeout`]: `1800`,
@@ -330,12 +327,9 @@ const PROJECT_CONFIG = {
             paths: [
               {
                 path: PROJECT_FRONTEND_INGRESS_PATH,
-                pathType: 'ImplementationSpecific',
                 backend: {
-                  service: {
-                    name: `${PROJECT_NAME}-frontend-service`,
-                    port: { number: 9090 },
-                  },
+                  serviceName: `${PROJECT_NAME}-frontend-service`,
+                  servicePort: 9090,
                 },
               },
             ],
